@@ -5,6 +5,7 @@ import 'package:suseli/materials/musicpage.dart';
 import 'package:suseli/materials/suseliprovider.dart';
 import 'package:suseli/pages/albumspage.dart';
 import 'package:suseli/pages/artistspage.dart';
+import 'package:suseli/pages/browsesongs.dart';
 import 'package:suseli/pages/genrespage.dart';
 import 'package:suseli/pages/songspage.dart';
 import 'package:suseli/pages/uploadpage.dart';
@@ -49,6 +50,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 break;
             }
           })),
+          MaterialButton(
+            child: Text("Browse Songs"),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BrowseSongs()));
+            },
+          ),
           Consumer<DbProvider>(
             builder: (context, db, child) {
               switch (db.status) {

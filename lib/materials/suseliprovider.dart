@@ -70,11 +70,11 @@ class MusicProvider extends ChangeNotifier {
   }
 
   // For playing songs from url
-  playFromUrl() async {
+  playFromUrl(link) async {
     // String url = 'http://suseli.org/api/songs/2/stream';
     // String url = "https://codingwithjoe.com/wp-content/uploads/2018/03/applause.mp3";
-    String url = 'http://suseli.org/api/songs/download';
-    int result = await audioPlayer.play(url);
+    // String url = 'http://suseli.org/api/songs/download';
+    int result = await audioPlayer.play(link);
     if (result == 1) {
       print("Played from Url");
     }
