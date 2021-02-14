@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -24,6 +25,7 @@ class DbProvider extends ChangeNotifier {
       final authResult = await _auth.signInWithCredential(credential);
       user = authResult.user;
       print(user.displayName);
+      // createUserInDb(user.uid, user.email);
       notifyListeners();
       status = Status.Authenticated;
       notifyListeners();
@@ -32,8 +34,18 @@ class DbProvider extends ChangeNotifier {
     }
   }
 
+  // createUserInDb(id, email) async {
+  //   Map<String, dynamic> userData = {'uid': id, 'email': email};
+  //   await FirebaseFirestore.instance
+  //       .collection('Users')
+  //       .doc(email)
+  //       .set(userData);
+  // }
+
   Future<void> signOutWithGoogle() async {
     await _signIn.signOut();
+    status = Status.Unauthenticaed;
+    notifyListeners();
     print("signed out");
   }
 }

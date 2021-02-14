@@ -7,6 +7,7 @@ import 'package:suseli/pages/albumspage.dart';
 import 'package:suseli/pages/artistspage.dart';
 import 'package:suseli/pages/genrespage.dart';
 import 'package:suseli/pages/songspage.dart';
+import 'package:suseli/pages/uploadpage.dart';
 
 import 'dbprovider.dart';
 
@@ -23,16 +24,94 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       drawer: Drawer(
         child: Column(children: [
-          DrawerHeader(child: Icon(Icons.person)),
+          DrawerHeader(
+              // ignore: missing_return
+              child: Consumer<DbProvider>(builder: (context, db, child) {
+            switch (db.status) {
+              case Status.Unauthenticaed:
+                return Icon(Icons.person);
+                break;
+              case Status.Authenticating:
+                return CircularProgressIndicator();
+                break;
+              case Status.Authenticated:
+                return Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 45,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(db.user.photoURL)),
+                    ),
+                    Text(db.user.displayName),
+                  ],
+                );
+                break;
+            }
+          })),
           Consumer<DbProvider>(
-            builder: (context, db, child) => IconButton(
-                icon: Icon(
-                  Icons.login,
-                ),
-                onPressed: () {
-                  print("pressed");
-                  db.signInWithGoogle();
-                }),
+            builder: (context, db, child) {
+              switch (db.status) {
+                case Status.Unauthenticaed:
+                  return Container();
+                  break;
+                case Status.Authenticating:
+                  return Container();
+                  break;
+                case Status.Authenticated:
+                  return MaterialButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UploadPage()));
+                    },
+                    child: Text("Upload Page"),
+                  );
+                  break;
+              }
+            },
+          ),
+          Consumer<DbProvider>(builder: (context, db, child) {
+            switch (db.status) {
+              case Status.Unauthenticaed:
+                return IconButton(
+                    icon: Icon(
+                      Icons.login,
+                    ),
+                    onPressed: () {
+                      print("pressed");
+                      db.signInWithGoogle();
+                    });
+                break;
+              case Status.Authenticating:
+                return CircularProgressIndicator();
+                break;
+              case Status.Authenticated:
+                return Text("You're logged in");
+                break;
+            }
+          }),
+          Consumer<DbProvider>(
+            // ignore: missing_return
+            builder: (context, db, child) {
+              switch (db.status) {
+                case Status.Unauthenticaed:
+                  return Container();
+                  break;
+                case Status.Authenticating:
+                  return CircularProgressIndicator();
+                  break;
+                case Status.Authenticated:
+                  return IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      db.signOutWithGoogle();
+                    },
+                  );
+                  break;
+              }
+            },
           )
         ]),
       ),
