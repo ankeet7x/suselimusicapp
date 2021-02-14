@@ -1,15 +1,20 @@
-import 'package:audio_picker/audio_picker.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 class MusicProvider extends ChangeNotifier {
-  MusicProvider() {
+  // MusicProvider() {
+  //   this.getSong();
+  //   // this.getAlbumInfo();
+  //   this.getArtistInfo();
+  //   this.getGenreInfo();
+  //   // this.getDuration();
+  // }
+
+  MusicProvider.initialize() {
     this.getSong();
-    // this.getAlbumInfo();
     this.getArtistInfo();
     this.getGenreInfo();
-    // this.getDuration();
   }
 
   //Colors
@@ -179,11 +184,7 @@ class MusicProvider extends ChangeNotifier {
 
   // AudioPicker audioPicker = AudioPicker();
   var path;
-  selectSong() async {
-    path = await AudioPicker.pickAudio();
-  }
-
-  uploadSong(song) async {
-    if (path != null) {}
-  }
+  // selectSong() async {
+  //   path = await AudioPicker.pickAudio();
+  // }
 }

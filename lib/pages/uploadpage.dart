@@ -20,7 +20,7 @@ class _UploadPageState extends State<UploadPage> {
             return RaisedButton(
               child: Text("Select your song"),
               onPressed: () {
-                pro.uploadSong();
+                // pro.selectSong();
               },
             );
           }),

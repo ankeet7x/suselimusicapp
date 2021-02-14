@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1076648446549",
+    "project_id": "suseli-8bcfb",
+    "storage_bucket": "suseli-8bcfb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076648446549:android:a7cfb507fa0791112062dc",
+        "android_client_info": {
+          "package_name": "com.example.suseli"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076648446549-b9vivcsbh17h4s2hentkiqrfun2k9nsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiw1-l3mgihEH-NnJ4M3q2dNcSVwWo0Jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076648446549-b9vivcsbh17h4s2hentkiqrfun2k9nsc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

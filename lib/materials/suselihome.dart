@@ -8,6 +8,8 @@ import 'package:suseli/pages/artistspage.dart';
 import 'package:suseli/pages/genrespage.dart';
 import 'package:suseli/pages/songspage.dart';
 
+import 'dbprovider.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -17,17 +19,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List<Widget> pages = [SongPage(), ArtistPage(), AlbumPage(), GenrePage()];
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MusicProvider>(context, listen: false);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(children: [
+          DrawerHeader(child: Icon(Icons.person)),
+          Consumer<DbProvider>(
+            builder: (context, db, child) => IconButton(
+                icon: Icon(
+                  Icons.login,
+                ),
+                onPressed: () {
+                  print("pressed");
+                  db.signInWithGoogle();
+                }),
+          )
+        ]),
+      ),
       body: DefaultTabController(
         length: 4,
         child: NestedScrollView(
