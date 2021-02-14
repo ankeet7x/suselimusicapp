@@ -25,8 +25,8 @@ class _BrowseSongsState extends State<BrowseSongs> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot docSnap = snapshot.data.docs[index];
                   return ListTile(
-                    title: Text(docSnap['songUrl']),
-                    subtitle: Text(docSnap['uploadedBy']),
+                    title: Text(docSnap['title']),
+                    subtitle: Text(docSnap['artist']),
                     onTap: () {
                       mp.playFromUrl(docSnap['songUrl']);
                     },

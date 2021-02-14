@@ -8,10 +8,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:random_string/random_string.dart';
 
 enum Status { Unauthenticaed, Authenticating, Authenticated }
-enum UploadingStatus { Uploading, Uploaded }
+enum UploadingStatus { Uploading, Uploaded, Idle }
 
 class DbProvider extends ChangeNotifier {
-  UploadingStatus uploadingStatus;
+  UploadingStatus uploadingStatus = UploadingStatus.Idle;
   Status status = Status.Unauthenticaed;
   User user;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -73,7 +73,7 @@ class DbProvider extends ChangeNotifier {
 
   String url;
 
-  uploadSong(song) async {
+  uploadSong(song, title, artist) async {
     uploadingStatus = UploadingStatus.Uploading;
     notifyListeners();
     if (song != null) {
@@ -89,14 +89,19 @@ class DbProvider extends ChangeNotifier {
           Map<String, dynamic> songData = {
             'songUrl': url,
             'uploadedBy': user.email,
+            'title': title,
+            'artist': artist
           };
           FirebaseFirestore.instance
               .collection("Songs")
               .add(songData)
               .then((value) => print("Uploaded"));
+          uploadingStatus = UploadingStatus.Uploaded;
           notifyListeners();
         });
       });
     }
+    uploadingStatus = UploadingStatus.Idle;
+    notifyListeners();
   }
 }

@@ -13,7 +13,7 @@ class MusicProvider extends ChangeNotifier {
 
   MusicProvider.initialize() {
     this.getSong();
-    this.getArtistInfo();
+    // this.getArtistInfo();
     this.getGenreInfo();
   }
 
