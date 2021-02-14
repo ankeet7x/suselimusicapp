@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:suseli/materials/dbprovider.dart';
 import 'package:suseli/materials/suseliprovider.dart';
 
 class UploadPage extends StatefulWidget {
@@ -16,17 +17,22 @@ class _UploadPageState extends State<UploadPage> {
       ),
       body: Column(
         children: [
-          Consumer<MusicProvider>(builder: (context, pro, child) {
+          Consumer<DbProvider>(builder: (context, db, child) {
             return RaisedButton(
               child: Text("Select your song"),
               onPressed: () {
+                db.selectSong();
                 // pro.selectSong();
               },
             );
           }),
-          IconButton(
-            icon: Icon(Icons.upload_file),
-            onPressed: () {},
+          Consumer<DbProvider>(
+            builder: (context, db, child) => IconButton(
+              icon: Icon(Icons.upload_file),
+              onPressed: () {
+                print(db.mp3.toString());
+              },
+            ),
           )
         ],
       ),

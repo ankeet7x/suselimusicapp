@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -47,5 +48,21 @@ class DbProvider extends ChangeNotifier {
     status = Status.Unauthenticaed;
     notifyListeners();
     print("signed out");
+  }
+
+  File mp3;
+  selectSong() async {
+    try {
+      FilePickerResult result =
+          await FilePicker.platform.pickFiles(type: FileType.audio);
+      if (result != null) {
+        File file = File(result.files.first.path);
+        mp3 = file;
+        notifyListeners();
+      } else {}
+    } catch (e) {
+      print(e.toString());
+    }
+    notifyListeners();
   }
 }

@@ -20,6 +20,7 @@ class _SongPageState extends State<SongPage> {
             leading: Icon(Icons.music_note),
             subtitle: Text(songP.songs[index].artist),
             trailing: Icon(Icons.more_vert),
+            onLongPress: () {},
             onTap: () {
               songP.playLocal(index);
               songP.setcurrentIndex(index);

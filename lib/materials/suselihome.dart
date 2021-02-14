@@ -60,6 +60,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   break;
                 case Status.Authenticated:
                   return MaterialButton(
+                    color: Colors.cyan,
                     onPressed: () {
                       Navigator.push(
                           context,
