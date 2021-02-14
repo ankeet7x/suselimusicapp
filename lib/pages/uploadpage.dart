@@ -29,8 +29,15 @@ class _UploadPageState extends State<UploadPage> {
           Consumer<DbProvider>(
             builder: (context, db, child) => IconButton(
               icon: Icon(Icons.upload_file),
-              onPressed: () {
-                print(db.mp3.toString());
+              onPressed: () async {
+                try {
+                  await db.uploadSong(db.mp3);
+                  Navigator.pop(context);
+                  // Scaffold.of(context)
+                  //     .showSnackBar(SnackBar(content: Text("Uploaded")));
+                } catch (e) {
+                  print(e.toString());
+                }
               },
             ),
           )

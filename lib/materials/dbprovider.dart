@@ -1,12 +1,17 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:random_string/random_string.dart';
 
 enum Status { Unauthenticaed, Authenticating, Authenticated }
+enum UploadingStatus { Uploading, Uploaded }
 
 class DbProvider extends ChangeNotifier {
+  UploadingStatus uploadingStatus;
   Status status = Status.Unauthenticaed;
   User user;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -64,5 +69,34 @@ class DbProvider extends ChangeNotifier {
       print(e.toString());
     }
     notifyListeners();
+  }
+
+  String url;
+
+  uploadSong(song) async {
+    uploadingStatus = UploadingStatus.Uploading;
+    notifyListeners();
+    if (song != null) {
+      Reference ref = FirebaseStorage.instance
+          .ref()
+          .child("Song")
+          .child('${randomAlphaNumeric(9)}.mp3');
+      UploadTask task = ref.putFile(song);
+      task.then((res) {
+        res.ref.getDownloadURL().then((String result) {
+          url = result;
+          notifyListeners();
+          Map<String, dynamic> songData = {
+            'songUrl': url,
+            'uploadedBy': user.email,
+          };
+          FirebaseFirestore.instance
+              .collection("Songs")
+              .add(songData)
+              .then((value) => print("Uploaded"));
+          notifyListeners();
+        });
+      });
+    }
   }
 }
