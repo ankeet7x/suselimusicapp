@@ -39,9 +39,7 @@ class _BrowseSongsState extends State<BrowseSongs> {
                   // print(index);
                   playerProvider
                       .playFromUrl(songProvider.netSongs[index].songUrl);
-                  playerProvider.getDuration();
-                  playerProvider.getPlayerState();
-                  playerProvider.getPosition();
+
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => MusicPage()));
                 },

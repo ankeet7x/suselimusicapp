@@ -78,6 +78,8 @@ class MusicProvider extends ChangeNotifier {
     if (result == 1) {
       print("Played from Url");
     }
+    getDuration();
+    getPosition();
   }
 
   // For pausing
@@ -168,6 +170,7 @@ class MusicProvider extends ChangeNotifier {
           .join(':');
       maximumValue = d.inMilliseconds.toDouble();
       notifyListeners();
+      print(duration);
     });
   }
 
