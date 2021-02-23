@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/materials/dbprovider.dart';
+import 'package:suseli/provider/netsongprovider.dart';
 import 'materials/suselihome.dart';
 import 'materials/suseliprovider.dart';
 
@@ -11,7 +12,8 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: MusicProvider.initialize()),
-      ChangeNotifierProvider.value(value: DbProvider())
+      ChangeNotifierProvider.value(value: DbProvider()),
+      ChangeNotifierProvider.value(value: NetSongProvider.initialize())
     ],
     child: MaterialApp(
       home: Home(),

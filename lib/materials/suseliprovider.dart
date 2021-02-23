@@ -33,7 +33,7 @@ class MusicProvider extends ChangeNotifier {
   void getSong() async {
     List<SongInfo> songList = await audioQuery.getSongs();
 
-    print(songList.length);
+    // print(songList.length);
     songs = songList;
   }
 
@@ -135,7 +135,7 @@ class MusicProvider extends ChangeNotifier {
     increasecurrentIndex();
     setcurrentIndex(currentIndex);
     playLocal(currentIndex);
-    print(currentIndex);
+    // print(currentIndex);
   }
 
   playPrevious() async {
@@ -143,13 +143,13 @@ class MusicProvider extends ChangeNotifier {
     decreasecurrentIndex();
     setcurrentIndex(currentIndex);
     playLocal(currentIndex);
-    print(currentIndex);
+    // print(currentIndex);
   }
 
   var playerState;
   getPlayerState() {
     audioPlayer.onPlayerStateChanged.listen((AudioPlayerState s) {
-      print("current player state $s");
+      // print("current player state $s");
       playerState = s;
       notifyListeners();
     });

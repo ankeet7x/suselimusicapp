@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:suseli/materials/musicpage.dart';
-import 'package:suseli/materials/suseliprovider.dart';
 import 'package:suseli/pages/albumspage.dart';
 import 'package:suseli/pages/artistspage.dart';
 import 'package:suseli/pages/browsesongs.dart';
@@ -50,12 +48,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 break;
             }
           })),
-          MaterialButton(
-            child: Text("Browse Songs"),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => BrowseSongs()));
-            },
+          Consumer<DbProvider>(
+            builder: (context, db, child) => MaterialButton(
+              child: Text("Browse Songs"),
+              onPressed: () async {
+                // await db.();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BrowseSongs()));
+              },
+            ),
           ),
           Consumer<DbProvider>(
             builder: (context, db, child) {

@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:random_string/random_string.dart';
+import 'package:suseli/models/songs.dart';
 
 enum Status { Unauthenticaed, Authenticating, Authenticated }
 enum UploadingStatus { Uploading, Uploaded, Idle }
@@ -14,7 +15,7 @@ class DbProvider extends ChangeNotifier {
   UploadingStatus uploadingStatus = UploadingStatus.Idle;
   Status status = Status.Unauthenticaed;
   User user;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _signIn = GoogleSignIn();
 
   signInWithGoogle() async {
@@ -28,7 +29,8 @@ class DbProvider extends ChangeNotifier {
       final AuthCredential credential = GoogleAuthProvider.credential(
           idToken: googleSignInAuthentication.idToken,
           accessToken: googleSignInAuthentication.accessToken);
-      final authResult = await _auth.signInWithCredential(credential);
+      final authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       user = authResult.user;
       print(user.displayName);
       // createUserInDb(user.uid, user.email);

@@ -1,7 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:suseli/materials/dbprovider.dart';
+import 'package:suseli/materials/musicpage.dart';
 import 'package:suseli/materials/suseliprovider.dart';
+import 'package:suseli/provider/netsongprovider.dart';
 
 class BrowseSongs extends StatefulWidget {
   @override
@@ -11,36 +13,41 @@ class BrowseSongs extends StatefulWidget {
 class _BrowseSongsState extends State<BrowseSongs> {
   @override
   Widget build(BuildContext context) {
+    final songProvider = Provider.of<NetSongProvider>(context);
+    final playerProvider = Provider.of<MusicProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Songs"),
-      ),
-      body: Consumer<MusicProvider>(
-        builder: (context, mp, child) => StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("Songs").snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot docSnap = snapshot.data.docs[index];
-                  return ListTile(
-                    title: Text(docSnap['title']),
-                    subtitle: Text(docSnap['artist']),
-                    onTap: () {
-                      mp.playFromUrl(docSnap['songUrl']);
-                    },
-                  );
+        appBar: AppBar(
+          title: Text("Songs"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                print(songProvider.netSongs.length);
+              },
+            )
+          ],
+        ),
+        body: Container(
+          child: ListView.builder(
+            itemCount: songProvider.netSongs.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(songProvider.netSongs[index].title == null
+                    ? "Null title"
+                    : songProvider.netSongs[index].title),
+                onTap: () {
+                  // print(index);
+                  playerProvider
+                      .playFromUrl(songProvider.netSongs[index].songUrl);
+                  playerProvider.getDuration();
+                  playerProvider.getPlayerState();
+                  playerProvider.getPosition();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MusicPage()));
                 },
               );
-            } else {
-              return Center(
-                child: Text("Empty"),
-              );
-            }
-          },
-        ),
-      ),
-    );
+            },
+          ),
+        ));
   }
 }

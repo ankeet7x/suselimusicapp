@@ -31,7 +31,6 @@ dependencies:
   audioplayers:
   flutter_audio_query:
   provider:
-  http:
   flutter_svg:
   firebase_storage: ^7.0.0
   google_sign_in: ^4.5.9
