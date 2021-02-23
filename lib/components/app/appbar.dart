@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suseli/materials/suseliprovider.dart';
+import 'package:suseli/provider/suseliprovider.dart';
 
 AppBar buildAppBar(MusicProvider songP) {
   return new AppBar(

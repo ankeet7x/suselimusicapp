@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'suseliprovider.dart';
+import '../provider/suseliprovider.dart';
 import 'package:provider/provider.dart';
 
 class MusicPage extends StatefulWidget {

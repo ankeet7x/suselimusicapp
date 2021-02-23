@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:suseli/materials/suseliprovider.dart';
+import 'package:suseli/provider/suseliprovider.dart';
 
 class GenrePage extends StatefulWidget {
   @override

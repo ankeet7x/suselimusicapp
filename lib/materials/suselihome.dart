@@ -7,8 +7,8 @@ import 'package:suseli/pages/browsesongs.dart';
 import 'package:suseli/pages/genrespage.dart';
 import 'package:suseli/pages/songspage.dart';
 import 'package:suseli/pages/uploadpage.dart';
-
-import 'dbprovider.dart';
+import 'package:suseli/provider/dbprovider.dart';
+import 'package:suseli/provider/netsongprovider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -48,11 +48,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 break;
             }
           })),
-          Consumer<DbProvider>(
-            builder: (context, db, child) => MaterialButton(
+          Consumer<NetSongProvider>(
+            builder: (context, netSong, child) => MaterialButton(
               child: Text("Browse Songs"),
               onPressed: () async {
                 // await db.();
+                netSong.netSongs.clear();
+                await netSong.fetchSongsFromInternet();
+
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => BrowseSongs()));
               },
@@ -135,7 +138,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   isScrollable: false,
                   // labelColor: Color(0xFF5454f4),
                   // unselectedLabelColor: Colors.white,
-                  indicatorColor: Colors.transparent,
+                  unselectedLabelColor: Colors.yellow,
+                  labelColor: Colors.white,
+
+                  indicatorColor: Colors.black,
                   tabs: [
                     Tab(
                       child: Text("Songs"),

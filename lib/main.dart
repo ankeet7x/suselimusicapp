@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:suseli/materials/dbprovider.dart';
+import 'package:suseli/provider/dbprovider.dart';
 import 'package:suseli/provider/netsongprovider.dart';
 import 'materials/suselihome.dart';
-import 'materials/suseliprovider.dart';
+import 'provider/suseliprovider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:suseli/materials/suseliprovider.dart';
+import 'package:suseli/provider/suseliprovider.dart';
 
 class AlbumPage extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _AlbumPageState extends State<AlbumPage> {
           title: Text(songP.songs[index].album),
           onTap: () {
             // print(songP.albums.length);
-            songP.albums.forEach((album) { 
+            songP.albums.forEach((album) {
               print(album.title + album.numberOfSongs);
             });
           },

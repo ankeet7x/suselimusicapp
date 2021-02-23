@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:suseli/materials/suseliprovider.dart';
+import 'package:suseli/provider/suseliprovider.dart';
 
 class ArtistPage extends StatefulWidget {
   @override
@@ -15,9 +15,7 @@ class _ArtistPageState extends State<ArtistPage> {
         itemCount: songP.artists.length,
         itemBuilder: (context, index) => ListTile(
           title: Text(songP.songs[index].artist),
-          onTap: (){
-            
-          },
+          onTap: () {},
         ),
       ),
     );

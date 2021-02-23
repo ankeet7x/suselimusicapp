@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:suseli/materials/dbprovider.dart';
+import 'package:suseli/provider/dbprovider.dart';
 
 class UploadPage extends StatefulWidget {
   @override
