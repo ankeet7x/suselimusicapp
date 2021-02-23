@@ -1,9 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:suseli/provider/netsongprovider.dart';
 import '../provider/suseliprovider.dart';
 import 'package:provider/provider.dart';
 
 class MusicPage extends StatefulWidget {
+  final String source;
+  MusicPage({this.source});
   @override
   _MusicPageState createState() => _MusicPageState();
 }
@@ -14,7 +17,9 @@ class _MusicPageState extends State<MusicPage> {
   Widget build(BuildContext context) {
     // print("Started from scratch");
     final songQ = Provider.of<MusicProvider>(context);
+    final netPro = Provider.of<NetSongProvider>(context);
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -26,11 +31,9 @@ class _MusicPageState extends State<MusicPage> {
               color: Color(0xFF5654B4),
               size: 24,
             )),
-        title: Consumer<MusicProvider>(
-          builder: (context, data, child) => Text(
-            "Now Playing",
-            style: TextStyle(color: data.purple, fontSize: 24),
-          ),
+        title: Text(
+          "Now Playing",
+          style: TextStyle(color: Colors.purple, fontSize: 24),
         ),
         centerTitle: true,
       ),
@@ -55,51 +58,90 @@ class _MusicPageState extends State<MusicPage> {
                 height: size.height * 0.1,
               ),
               Center(
-                child: Text(
-                  songQ.songs[songQ.currentIndex].title,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
+                child: widget.source == 'local'
+                    ? Text(
+                        songQ.songs[songQ.currentIndex].title,
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      )
+                    : Text(
+                        netPro.netSongs[netPro.currentIndex].title,
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
               ),
               SizedBox(
                 child: Center(
-                  child: Text(
-                    songQ.songs[songQ.currentIndex].artist,
-                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-                  ),
+                  child: widget.source == 'local'
+                      ? Text(
+                          songQ.songs[songQ.currentIndex].artist,
+                          style: TextStyle(
+                              fontSize: 19, fontWeight: FontWeight.bold),
+                        )
+                      : Text(
+                          netPro.netSongs[netPro.currentIndex].artist,
+                          style: TextStyle(
+                              fontSize: 19, fontWeight: FontWeight.bold),
+                        ),
                 ),
                 // height: size.height * 0.2,
               ),
               SizedBox(height: size.height * 0.1),
-              Slider(
-                value: songQ.positioninS,
-                activeColor: songQ.purple,
-                inactiveColor: Colors.grey,
-                onChanged: (value) {
-                  songQ.positioninS = value;
-                  songQ.audioPlayer
-                      .seek(Duration(milliseconds: songQ.positioninS.round()));
-                },
-                max: songQ.maximumValue,
-                min: songQ.minimumValue,
+              Container(
+                child: widget.source == 'local'
+                    ? Slider(
+                        value: songQ.positioninS,
+                        activeColor: songQ.purple,
+                        inactiveColor: Colors.grey,
+                        onChanged: (value) {
+                          songQ.positioninS = value;
+                          songQ.audioPlayer.seek(Duration(
+                              milliseconds: songQ.positioninS.round()));
+                        },
+                        max: songQ.maximumValue,
+                        min: songQ.minimumValue,
+                      )
+                    : Slider(
+                        value: netPro.positioninS,
+                        activeColor: Colors.purple,
+                        inactiveColor: Colors.grey,
+                        onChanged: (value) {
+                          netPro.positioninS = value;
+                          netPro.audioPlayer.seek(Duration(
+                              milliseconds: netPro.positioninS.round()));
+                        },
+                        max: netPro.maximumValue,
+                        min: netPro.minimumValue,
+                      ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
                       margin: EdgeInsets.only(left: 22),
-                      child: Text(
-                        songQ.position,
-                        style: TextStyle(fontSize: 15),
-                      )),
+                      child: widget.source == 'local'
+                          ? Text(
+                              songQ.position,
+                              style: TextStyle(fontSize: 15),
+                            )
+                          : Text(
+                              netPro.position,
+                              style: TextStyle(fontSize: 15),
+                            )),
                   Expanded(
                     child: Container(),
                   ),
                   Container(
                       margin: EdgeInsets.only(right: 22),
-                      child: Text(
-                        songQ.duration,
-                        style: TextStyle(fontSize: 15),
-                      )),
+                      child: widget.source == 'local'
+                          ? Text(
+                              songQ.duration,
+                              style: TextStyle(fontSize: 15),
+                            )
+                          : Text(
+                              netPro.duration,
+                              style: TextStyle(fontSize: 15),
+                            )),
                 ],
               ),
               SizedBox(height: size.height * 0.1),
@@ -116,29 +158,55 @@ class _MusicPageState extends State<MusicPage> {
                           size: 42,
                         ),
                         onPressed: () {
-                          songQ.playPrevious();
+                          if (widget.source == "local") {
+                            songQ.playPrevious();
+                          } else {
+                            netPro.playPrevious();
+                          }
                         },
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.all(10.0),
-                      child: IconButton(
-                        icon: songQ.playerState == AudioPlayerState.PLAYING
-                            ? Icon(
-                                Icons.pause,
-                                size: 60,
-                              )
-                            : Icon(Icons.play_arrow, size: 60),
-                        onPressed: () {
-                          songQ.getPlayerState();
-                          if (songQ.playerState == AudioPlayerState.PLAYING) {
-                            songQ.pause();
-                          } else if (songQ.playerState ==
-                              AudioPlayerState.PAUSED) {
-                            songQ.resume();
-                          }
-                        },
-                      ),
+                      child: widget.source == 'local'
+                          ? IconButton(
+                              icon:
+                                  songQ.playerState == AudioPlayerState.PLAYING
+                                      ? Icon(
+                                          Icons.pause,
+                                          size: 60,
+                                        )
+                                      : Icon(Icons.play_arrow, size: 60),
+                              onPressed: () {
+                                songQ.getPlayerState();
+                                if (songQ.playerState ==
+                                    AudioPlayerState.PLAYING) {
+                                  songQ.pause();
+                                } else if (songQ.playerState ==
+                                    AudioPlayerState.PAUSED) {
+                                  songQ.resume();
+                                }
+                              },
+                            )
+                          : IconButton(
+                              icon:
+                                  netPro.playerState == AudioPlayerState.PLAYING
+                                      ? Icon(
+                                          Icons.pause,
+                                          size: 60,
+                                        )
+                                      : Icon(Icons.play_arrow, size: 60),
+                              onPressed: () {
+                                netPro.getPlayerState();
+                                if (netPro.playerState ==
+                                    AudioPlayerState.PLAYING) {
+                                  netPro.pause();
+                                } else if (netPro.playerState ==
+                                    AudioPlayerState.PAUSED) {
+                                  netPro.resume();
+                                }
+                              },
+                            ),
                     ),
                     Container(
                       margin: const EdgeInsets.all(0.0),
@@ -151,7 +219,11 @@ class _MusicPageState extends State<MusicPage> {
                             size: 42,
                           ),
                           onPressed: () {
-                            songQ.playNext();
+                            if (widget.source == "local") {
+                              songQ.playNext();
+                            } else {
+                              netPro.playNext();
+                            }
                           },
                         ),
                       ),

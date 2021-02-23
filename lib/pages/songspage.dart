@@ -29,8 +29,12 @@ class _SongPageState extends State<SongPage> {
               songP.getPlayerState();
               print('Artist is : ${songP.songs[index].artistId}');
               songP.getPosition();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MusicPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MusicPage(
+                            source: "local",
+                          )));
             },
           );
         },

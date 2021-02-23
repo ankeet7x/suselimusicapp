@@ -6,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:random_string/random_string.dart';
-import 'package:suseli/models/songs.dart';
 
 enum Status { Unauthenticaed, Authenticating, Authenticated }
 enum UploadingStatus { Uploading, Uploaded, Idle }

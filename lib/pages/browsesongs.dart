@@ -13,7 +13,7 @@ class _BrowseSongsState extends State<BrowseSongs> {
   @override
   Widget build(BuildContext context) {
     final songProvider = Provider.of<NetSongProvider>(context);
-    final playerProvider = Provider.of<MusicProvider>(context);
+    // final playerProvider = Provider.of<MusicProvider>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text("Songs"),
@@ -21,7 +21,7 @@ class _BrowseSongsState extends State<BrowseSongs> {
             IconButton(
               icon: Icon(Icons.menu),
               onPressed: () {
-                print(songProvider.netSongs.length);
+                songProvider.stop();
               },
             )
           ],
@@ -37,11 +37,14 @@ class _BrowseSongsState extends State<BrowseSongs> {
                     : songProvider.netSongs[index].title),
                 onTap: () {
                   // print(index);
-                  playerProvider
+                  songProvider.setcurrentIndex(index);
+                  songProvider
                       .playFromUrl(songProvider.netSongs[index].songUrl);
 
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MusicPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MusicPage(source: "internet")));
                 },
               );
             },

@@ -17,7 +17,7 @@ void main() async {
     ],
     child: MaterialApp(
       home: Home(),
-      title: "MP",
+      title: "Suseli",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           brightness: Brightness.light,
