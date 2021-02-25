@@ -24,6 +24,7 @@ class _MusicPageState extends State<MusicPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        actions: [],
         leading: GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Icon(

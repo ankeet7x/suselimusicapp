@@ -25,6 +25,7 @@ class _SongPageState extends State<SongPage> {
               songP.playLocal(index);
               songP.setcurrentIndex(index);
               print(songP.songs[index].artistId);
+              print("album: "+ songP.songs[index].albumArtwork);
               songP.getDuration();
               songP.getPlayerState();
               print('Artist is : ${songP.songs[index].artistId}');

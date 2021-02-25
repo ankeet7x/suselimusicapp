@@ -47,6 +47,8 @@ class MusicProvider extends ChangeNotifier {
     genres = genreList;
   }
 
+  
+
   // For playing songs from local
   bool play = false;
   bool changedState = false;

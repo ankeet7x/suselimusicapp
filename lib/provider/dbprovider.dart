@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -5,13 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 
 enum Status { Unauthenticaed, Authenticating, Authenticated }
-enum UploadingStatus { Uploading, Uploaded, Idle }
 
 class DbProvider extends ChangeNotifier {
-  UploadingStatus uploadingStatus = UploadingStatus.Idle;
   Status status = Status.Unauthenticaed;
   User user;
   // final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -41,13 +41,7 @@ class DbProvider extends ChangeNotifier {
     }
   }
 
-  // createUserInDb(id, email) async {
-  //   Map<String, dynamic> userData = {'uid': id, 'email': email};
-  //   await FirebaseFirestore.instance
-  //       .collection('Users')
-  //       .doc(email)
-  //       .set(userData);
-  // }
+ 
 
   Future<void> signOutWithGoogle() async {
     await _signIn.signOut();
@@ -72,37 +66,79 @@ class DbProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String url;
+  File albumArt;
+  final picker = ImagePicker();
+  getAlbumArt() async{
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    if (pickedImage != null){
+      albumArt = File(pickedImage.path);
+      notifyListeners();
+    }
 
-  uploadSong(song, title, artist) async {
-    uploadingStatus = UploadingStatus.Uploading;
+  }
+
+
+  String url;
+  String imgUrl;
+  Timer timer;
+  String title;
+  String artist;
+  String currentUser;
+
+  uploadSong(song, title, artist, coverImage) async {
     notifyListeners();
-    if (song != null) {
-      Reference ref = FirebaseStorage.instance
+    if (song != null && coverImage != null) {
+      Reference songRef = FirebaseStorage.instance
           .ref()
           .child("Song")
           .child('${randomAlphaNumeric(9)}.mp3');
-      UploadTask task = ref.putFile(song);
+    Reference coverImageRef = FirebaseStorage.instance
+          .ref()
+          .child("Cover")
+          .child('${randomAlphaNumeric(9)}.mp3');
+      UploadTask task = songRef.putFile(song);
+      UploadTask imgUpload = coverImageRef.putFile(coverImage);
+
       task.then((res) {
         res.ref.getDownloadURL().then((String result) {
           url = result;
           notifyListeners();
-          Map<String, dynamic> songData = {
-            'songUrl': url,
-            'uploadedBy': user.email,
-            'title': title,
-            'artist': artist
-          };
-          FirebaseFirestore.instance
-              .collection("Songs")
-              .add(songData)
-              .then((value) => print("Uploaded"));
-          uploadingStatus = UploadingStatus.Uploaded;
+          currentUser = user.email;
+          artist = artist;
+          title = title;
           notifyListeners();
         });
       });
+      imgUpload.then((res) => res.ref.getDownloadURL().then((String result) {
+        imgUrl = result;
+        notifyListeners();
+      }));
     }
-    uploadingStatus = UploadingStatus.Idle;
     notifyListeners();
+
+
+    Future.delayed(const Duration(seconds: 2),(){
+      uploadToDb(currentUser, title, artist, url, imgUrl);
+      
+
+    });
+
+
+
   }
+
+  uploadToDb(uploadedBy, title, artist, songUrl, imageUrl) async{
+    Map<String, dynamic> songData = {
+          'songUrl': songUrl,
+            'uploadedBy': user.email,
+            'title': title,
+            'artist': artist,
+            'imageUrl': imageUrl,
+      };
+      await FirebaseFirestore.instance.collection("Songs").add(songData).then((value) => print("Uploaded"));
+        notifyListeners();
+  }
+
+
+
 }

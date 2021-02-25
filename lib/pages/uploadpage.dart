@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/provider/dbprovider.dart';
+import 'package:suseli/provider/netsongprovider.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -16,35 +17,36 @@ class _UploadPageState extends State<UploadPage> {
   void dispose() {
     _titleController.dispose();
     _artistController.dispose();
+    
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DbProvider>(context);
+    final netP = Provider.of<NetSongProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Upload Page"),
       ),
       body: Column(
         children: [
-          Consumer<DbProvider>(builder: (context, db, child) {
-            return RaisedButton(
+          RaisedButton(
               child: Text("Select your song"),
               onPressed: () {
                 db.selectSong();
                 // pro.selectSong();
               },
-            );
-          }),
-          Consumer<DbProvider>(
-            builder: (context, db, child) {
-              if (db.mp3 != null) {
-                return Text(db.mp3.uri.toString());
-              } else {
-                return Container();
-              }
-            },
-          ),
+            ),
+           RaisedButton(
+                child: Text("Pick album art"),
+                onPressed: (){
+                  db.getAlbumArt();
+                },
+              )
+        ,
+
+          
           Form(
             key: _formKey,
             child: Column(
@@ -66,8 +68,7 @@ class _UploadPageState extends State<UploadPage> {
               ],
             ),
           ),
-          Consumer<DbProvider>(
-            builder: (context, db, child) => InkWell(
+          InkWell(
               splashColor: Colors.cyan,
               onTap: () async {
                 try {
@@ -75,8 +76,12 @@ class _UploadPageState extends State<UploadPage> {
                     _formKey.currentState.save();
                     print("Uploading");
                     await db.uploadSong(
-                        db.mp3, _titleController.text, _artistController.text);
+                        db.mp3, _titleController.text, _artistController.text, db.albumArt);
                     // Navigator.pop(context);
+
+                    Future.delayed(Duration(seconds: 5), (){
+                      netP.fetchSongsFromInternet();
+                    });
                   }
                 } catch (e) {
                   print(e.toString());
@@ -86,23 +91,8 @@ class _UploadPageState extends State<UploadPage> {
                 children: [Icon(Icons.upload_file), Text("Upload")],
               ),
             ),
-          ),
-          Consumer<DbProvider>(
-            builder: (context, db, child) {
-              switch (db.uploadingStatus) {
-                case UploadingStatus.Uploading:
-                  return CircularProgressIndicator(
-                    backgroundColor: Colors.purple,
-                  );
-                  break;
-                case UploadingStatus.Uploaded:
-                  return Text("Your song has been uploaded");
-                  break;
-                case UploadingStatus.Idle:
-                  return Container();
-              }
-            },
-          )
+          
+          
         ],
       ),
     );
