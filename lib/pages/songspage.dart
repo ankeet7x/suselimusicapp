@@ -22,6 +22,7 @@ class _SongPageState extends State<SongPage> {
             trailing: Icon(Icons.more_vert),
             onLongPress: () {},
             onTap: () {
+              songP.stop();
               songP.playLocal(index);
               songP.setcurrentIndex(index);
               print(songP.songs[index].artistId);

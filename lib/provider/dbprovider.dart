@@ -37,6 +37,7 @@ class DbProvider extends ChangeNotifier {
       status = Status.Authenticated;
       notifyListeners();
     } catch (e) {
+      
       print(e.toString());
     }
   }
@@ -99,45 +100,43 @@ class DbProvider extends ChangeNotifier {
       UploadTask task = songRef.putFile(song);
       UploadTask imgUpload = coverImageRef.putFile(coverImage);
 
-      task.then((res) {
-        res.ref.getDownloadURL().then((String result) {
-          url = result;
-          notifyListeners();
-          currentUser = user.email;
-          artist = artist;
-          title = title;
-          notifyListeners();
-        });
-      });
+      
       imgUpload.then((res) => res.ref.getDownloadURL().then((String result) {
         imgUrl = result;
         notifyListeners();
+        Future.delayed(const Duration(seconds: 2),(){
+          task.then((res) {
+        res.ref.getDownloadURL().then((String dataUrl) {
+          url = dataUrl;
+          Map<String, dynamic> songData = {
+            'title': title,
+            'artist': artist,
+            'uploadedBy': user.email,
+            'imageUrl': imgUrl,
+            'songUrl': dataUrl
+          };
+          print('Adding data for fs');
+          FirebaseFirestore.instance.collection("Songs").add(songData).then((value) => print("Uploaded to db"));
+          notifyListeners();
+        });
+      });
+          
+
+    });
       }));
+      
+
     }
     notifyListeners();
 
 
-    Future.delayed(const Duration(seconds: 2),(){
-      uploadToDb(currentUser, title, artist, url, imgUrl);
-      
-
-    });
+    
 
 
 
   }
 
-  uploadToDb(uploadedBy, title, artist, songUrl, imageUrl) async{
-    Map<String, dynamic> songData = {
-          'songUrl': songUrl,
-            'uploadedBy': user.email,
-            'title': title,
-            'artist': artist,
-            'imageUrl': imageUrl,
-      };
-      await FirebaseFirestore.instance.collection("Songs").add(songData).then((value) => print("Uploaded"));
-        notifyListeners();
-  }
+  
 
 
 

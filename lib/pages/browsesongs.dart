@@ -34,7 +34,7 @@ class _BrowseSongsState extends State<BrowseSongs> {
                 leading: Container(
                   width: 55,
                   height: 55,
-                  child: ClipRRect(
+                  child: songProvider.netSongs[index].imageUrl == null ? Icon(Icons.music_note): ClipRRect(
                     borderRadius: BorderRadius.circular(50),
                     child: Image.network(songProvider.netSongs[index].imageUrl, fit: BoxFit.cover,),
                   ),
