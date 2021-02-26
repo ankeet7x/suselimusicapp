@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:suseli/provider/netsongprovider.dart';
 import '../provider/suseliprovider.dart';
@@ -48,12 +49,22 @@ class _MusicPageState extends State<MusicPage> {
               SizedBox(
                 height: size.height * 0.1,
               ),
-              CircleAvatar(
-                backgroundColor: Colors.transparent,
-                backgroundImage: AssetImage(
-                  "assets/download.jpeg",
+              Container(
+                height: 200,
+                width: 200,
+                child: widget.source == 'local' ? CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: AssetImage(
+                    "assets/download.jpeg",
+                  ) ,
+                ): ClipRRect(
+                  borderRadius: BorderRadius.circular(150),
+                  child: CachedNetworkImage(
+                      imageUrl: netPro.netSongs[netPro.currentIndex].imageUrl,
+                      placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+                    )
                 ),
-                radius: 120,
               ),
               SizedBox(
                 height: size.height * 0.1,
