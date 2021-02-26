@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               child: Consumer<DbProvider>(builder: (context, db, child) {
             switch (db.status) {
               case Status.Unauthenticaed:
-                return Icon(Icons.person);
+                return Icon(Icons.error);
                 break;
               case Status.Authenticating:
                 return CircularProgressIndicator();
@@ -40,7 +41,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       radius: 45,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(50),
-                          child: Image.network(db.user.photoURL)),
+                          child: CachedNetworkImage(
+                            imageUrl: db.user.photoURL,
+                            placeholder: (context, url) => CircularProgressIndicator(),
+                             errorWidget: (context, url, error) => Icon(Icons.error),
+                          ),)
                     ),
                     Text(db.user.displayName),
                   ],
@@ -202,6 +207,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
         ),
       ),
+      
     );
   }
 }
