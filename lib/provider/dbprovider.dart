@@ -12,6 +12,7 @@ import 'package:random_string/random_string.dart';
 enum Status { Unauthenticaed, Authenticating, Authenticated }
 // enum UploadingStat {Free, Uploading, Uploaded}
 
+enum UploadingStatus {Uploading, Uploaded, Free}
 
 class DbProvider extends ChangeNotifier {
   Status status = Status.Unauthenticaed;
@@ -87,10 +88,13 @@ class DbProvider extends ChangeNotifier {
   String title;
   String artist;
   String currentUser;
+  UploadingStatus upStatus = UploadingStatus.Free;
 
   uploadSong(song, title, artist, coverImage) async {
     notifyListeners();
     if (song != null && coverImage != null) {
+      upStatus = UploadingStatus.Uploading;
+      notifyListeners();
       Reference songRef = FirebaseStorage.instance
           .ref()
           .child("Song")
@@ -119,7 +123,12 @@ class DbProvider extends ChangeNotifier {
           };
           print('Adding data for fs');
           FirebaseFirestore.instance.collection("Songs").add(songData).then((value) => print("Uploaded to db"));
+          upStatus = UploadingStatus.Uploaded;
           notifyListeners();
+          Future.delayed(Duration(seconds: 3), (){
+            upStatus = UploadingStatus.Free;
+            notifyListeners();
+          });
         });
       });
           

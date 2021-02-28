@@ -17,7 +17,6 @@ class _UploadPageState extends State<UploadPage> {
   void dispose() {
     _titleController.dispose();
     _artistController.dispose();
-    
     super.dispose();
   }
 
@@ -31,22 +30,6 @@ class _UploadPageState extends State<UploadPage> {
       ),
       body: Column(
         children: [
-          RaisedButton(
-              child: Text("Select your song"),
-              onPressed: () {
-                db.selectSong();
-                // pro.selectSong();
-              },
-            ),
-           RaisedButton(
-                child: Text("Pick album art"),
-                onPressed: (){
-                  db.getAlbumArt();
-                },
-              )
-        ,
-
-          
           Form(
             key: _formKey,
             child: Column(
@@ -68,6 +51,20 @@ class _UploadPageState extends State<UploadPage> {
               ],
             ),
           ),
+          RaisedButton(
+              child: Text("Select your song"),
+              onPressed: () {
+                db.selectSong();
+                // pro.selectSong();
+              },
+            ),
+           RaisedButton(
+                child: Text("Pick album art"),
+                onPressed: (){
+                  db.getAlbumArt();
+                },
+              )
+        ,
           InkWell(
               splashColor: Colors.cyan,
               onTap: () async {
@@ -91,7 +88,23 @@ class _UploadPageState extends State<UploadPage> {
                 children: [Icon(Icons.upload_file), Text("Upload")],
               ),
             ),
-          
+          Consumer<DbProvider>(builder: (context, db, child){
+            switch(db.upStatus){
+              
+              case UploadingStatus.Uploading:
+                return Row(children: [
+                  Text("Uploading to db"),
+                  CircularProgressIndicator()
+                ],);
+                break;
+              case UploadingStatus.Uploaded:
+                return Text("Uploaded");
+                break;
+              case UploadingStatus.Free:
+                return Container();
+                break;
+            }
+          },)
           
         ],
       ),
