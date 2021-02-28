@@ -18,6 +18,7 @@ class _SongPageState extends State<SongPage> {
           return ListTile(
             title: Text(songP.songs[index].title),
             leading: Icon(Icons.music_note),
+            // leading: songP.songs[index].albumArtwork == null ? Icon(Icons.music_note): Image.file(File(songP.songs[index].albumArtwork)),
             subtitle: Text(songP.songs[index].artist),
             trailing: Icon(Icons.more_vert),
             onLongPress: () {},

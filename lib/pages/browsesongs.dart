@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/materials/musicpage.dart';
@@ -36,7 +37,11 @@ class _BrowseSongsState extends State<BrowseSongs> {
                   height: 55,
                   child: songProvider.netSongs[index].imageUrl == null ? Icon(Icons.music_note): ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    child: Image.network(songProvider.netSongs[index].imageUrl, fit: BoxFit.cover,),
+                    child: CachedNetworkImage(
+                      imageUrl: songProvider.netSongs[index].imageUrl,
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
                   ),
                 ),
                 subtitle: Text(songProvider.netSongs[index].artist),
@@ -47,12 +52,14 @@ class _BrowseSongsState extends State<BrowseSongs> {
                   // print(index);
                   songProvider.setcurrentIndex(index);
                   songProvider
-                      .playFromUrl(songProvider.netSongs[index].songUrl);
+                      .playFromUrl(songProvider.netSongs[songProvider.currentIndex].songUrl);
 
-                  Navigator.push(
+                 Future.delayed(Duration(seconds: 3), (){
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => MusicPage(source: "internet")));
+                 });
                 },
               );
             },

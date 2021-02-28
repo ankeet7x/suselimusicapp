@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/pages/albumspage.dart';
 import 'package:suseli/pages/artistspage.dart';
@@ -17,11 +16,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  TextEditingController _searchController = TextEditingController();
   List<Widget> pages = [SongPage(), ArtistPage(), AlbumPage(), GenrePage()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       drawer: Drawer(
         child: Column(children: [
           DrawerHeader(
@@ -29,7 +30,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               child: Consumer<DbProvider>(builder: (context, db, child) {
             switch (db.status) {
               case Status.Unauthenticaed:
-                return Icon(Icons.error);
+                return Icon(Icons.person);
                 break;
               case Status.Authenticating:
                 return CircularProgressIndicator();
@@ -43,10 +44,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(50),
                           child: CachedNetworkImage(
                             imageUrl: db.user.photoURL,
-                            placeholder: (context, url) => CircularProgressIndicator(),
+                            placeholder: (context, url) => Container(),
                              errorWidget: (context, url, error) => Icon(Icons.error),
                           ),)
                     ),
+                    SizedBox(height: 5),
                     Text(db.user.displayName),
                   ],
                 );
@@ -110,6 +112,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 break;
             }
           }),
+          Divider(
+          ),
           Consumer<DbProvider>(
             // ignore: missing_return
             builder: (context, db, child) {
@@ -130,7 +134,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   break;
               }
             },
-          )
+          ),
+
+
         ]),
       ),
       body: DefaultTabController(
@@ -164,40 +170,64 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ),
                 expandedHeight: 180.0,
                 floating: false,
-                title: Text("Suseli"),
+                title: Container(
+                  width: 280,
+                  height: 45,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white.withOpacity(0.9)),
+                  child: Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(1.0, 8, 8, 8),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          focusedBorder: InputBorder.none,
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search, color: Colors.purple,),
+                          disabledBorder: InputBorder.none
+                        ),
+                      ),
+                    )
+                  ),
+                ),
+                
                 // backgroundColor: Color(0xFF5454f4),
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.none,
                   title: Padding(
-                    padding: const EdgeInsets.only(bottom: 28.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      // crossAxisAlignment: CrossAxisAlignment/s,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 0),
-                          height: 20,
-                          width: 20,
-                          child: GestureDetector(
-                            child: SvgPicture.asset(
-                              'assets/menu.svg',
-                              color: Colors.white,
-                            ),
-                            onTap: () {
-                              print('tapped');
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: TextField(),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.info),
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
+                    padding: const EdgeInsets.only(bottom:28.0),
+                    // child: Text("Suseli"),
                   ),
+                  // title: Padding(
+                  //   padding: const EdgeInsets.only(bottom: 28.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     // crossAxisAlignment: CrossAxisAlignment/s,
+                  //     children: [
+                  //       Container(
+                  //         margin: const EdgeInsets.only(left: 0),
+                  //         height: 20,
+                  //         width: 20,
+                  //         child: GestureDetector(
+                  //           child: SvgPicture.asset(
+                  //             'assets/menu.svg',
+                  //             color: Colors.white,
+                  //           ),
+                  //           onTap: () {
+                  //             print('tapped');
+                  //           },
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //         child: TextField(),
+                  //       ),
+                  //       IconButton(
+                  //         icon: Icon(Icons.info),
+                  //         onPressed: () {},
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                 ),
               ),
             ];

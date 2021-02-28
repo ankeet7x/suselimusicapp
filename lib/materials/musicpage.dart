@@ -214,7 +214,7 @@ class _MusicPageState extends State<MusicPage> {
                                     AudioPlayerState.PLAYING) {
                                   netPro.pause();
                                 } else if (netPro.playerState ==
-                                    AudioPlayerState.PAUSED) {
+                                    AudioPlayerState.PAUSED) { 
                                   netPro.resume();
                                 }
                               },

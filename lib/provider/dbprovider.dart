@@ -10,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 
 enum Status { Unauthenticaed, Authenticating, Authenticated }
+// enum UploadingStat {Free, Uploading, Uploaded}
+
 
 class DbProvider extends ChangeNotifier {
   Status status = Status.Unauthenticaed;
