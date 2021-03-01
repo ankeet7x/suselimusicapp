@@ -5,6 +5,7 @@ import 'package:suseli/pages/albumspage.dart';
 import 'package:suseli/pages/artistspage.dart';
 import 'package:suseli/pages/browsesongs.dart';
 import 'package:suseli/pages/genrespage.dart';
+import 'package:suseli/pages/profile.dart';
 import 'package:suseli/pages/songspage.dart';
 import 'package:suseli/pages/uploadpage.dart';
 import 'package:suseli/provider/dbprovider.dart';
@@ -24,57 +25,51 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       
       drawer: Drawer(
-        child: Column(children: [
-          DrawerHeader(
-              // ignore: missing_return
-              child: Consumer<DbProvider>(builder: (context, db, child) {
-            switch (db.status) {
-              case Status.Unauthenticaed:
-                return CircleAvatar(
-                  radius: 45,
-                  backgroundColor: Colors.purple,
-                  child: Icon(Icons.person, color: Colors.white, size: 58,)
-                  );
-                break;
-              case Status.Authenticating:
-                return Text("Logging In");
-                break;
-              case Status.Authenticated:
-                return Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 45,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: CachedNetworkImage(
-                            imageUrl: db.user.photoURL,
-                            placeholder: (context, url) => Container(),
-                             errorWidget: (context, url, error) => Icon(Icons.error),
-                          ),)
-                    ),
-                    SizedBox(height: 5),
-                    Text(db.user.displayName),
-                  ],
-                );
-                break;
-            }
-          })),
-          Consumer<NetSongProvider>(
-            builder: (context, netSong, child) => MaterialButton(
-              child: Text("Browse Songs"),
-              onPressed: () async {
-                // await db.();
-                netSong.netSongs.clear();
-                await netSong.fetchSongsFromInternet();
-
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BrowseSongs()));
-              },
-            ),
-          ),
-          Consumer<DbProvider>(
-            builder: (context, db, child) {
+        elevation: 10,
+        child: Container(
+          color: Color(0xFF03C6C7),
+          child: Column(children: [
+            DrawerHeader(
+                // ignore: missing_return
+                child: Consumer<DbProvider>(builder: (context, db, child) {
               switch (db.status) {
+                case Status.Unauthenticaed:
+                  return CircleAvatar(
+                    radius: 45,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.person, color: Color(0xFF03C6C7), size: 58,)
+                    );
+                  break;
+                case Status.Authenticating:
+                  return Text("Logging In");
+                  break;
+                case Status.Authenticated:
+                  return Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 45,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: CachedNetworkImage(
+                              imageUrl: db.user.photoURL,
+                              placeholder: (context, url) => Container(),
+                               errorWidget: (context, url, error) => Icon(Icons.error),
+                            ),)
+                      ),
+                      SizedBox(height: 5),
+                      Text(db.user.displayName, style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18
+                      ),),
+                      
+                    ],
+                  );
+                  break;
+              }
+            })),
+            Consumer<DbProvider>(builder: (context, db, child){
+              switch(db.status){
+                
                 case Status.Unauthenticaed:
                   return Container();
                   break;
@@ -82,84 +77,149 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   return Container();
                   break;
                 case Status.Authenticated:
-                  return MaterialButton(
-                    // color: Colors.cyan,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UploadPage()));
-                    },
-                    child: Text("Upload Page"),
+                  return Consumer<NetSongProvider>(builder: (context, netSong, child) => MaterialButton(
+              child: Text("Profile",style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    
+                ),
+                
+                ),
+                onPressed: () async{
+                    netSong.netSongs.clear();
+                    await netSong.fetchSongsFromInternet();
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => ProfilePage()
+                    ));
+                },
+            ),
                   );
                   break;
               }
-            },
-          ),
-          Consumer<DbProvider>(builder: (context, db, child) {
-            switch (db.status) {
-              case Status.Unauthenticaed:
-                return GestureDetector(
-                    onTap: (){
-                      db.signInWithGoogle();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
-                          Text("Log In"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.login),
-                          ),
-                        ]                   
-                    ),
-                  );
-                break;
-              case Status.Authenticating:
-                return Text("Logging in");
-                break;
-              case Status.Authenticated:
-                return Container();
-                break;
-            }
-          }),
-          Divider(
-          ),
-          Consumer<DbProvider>(
-            // ignore: missing_return
-            builder: (context, db, child) {
+            }),
+            
+            Consumer<NetSongProvider>(
+              builder: (context, netSong, child) => MaterialButton(
+                child: Text("Browse Songs",style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  
+                ),),
+                onPressed: () async {
+                  // await db.();
+                  netSong.netSongs.clear();
+                  await netSong.fetchSongsFromInternet();
+
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => BrowseSongs()));
+                },
+              ),
+            ),
+            Divider(
+            ),
+            Consumer<DbProvider>(
+              builder: (context, db, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    return MaterialButton(
+                      // color: Colors.cyan,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UploadPage()));
+                      },
+                      child: Text("Upload Page",style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  
+                )),
+                    );
+                    break;
+                }
+              },
+            ),
+            // Divider(
+            // ),
+            Consumer<DbProvider>(builder: (context, db, child) {
               switch (db.status) {
                 case Status.Unauthenticaed:
-                  return Container();
+                  return GestureDetector(
+                      onTap: (){
+                        db.signInWithGoogle();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          children:[
+                            Text("Log In",style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  
+                )),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.login),
+                            ),
+                          ]                   
+                      ),
+                    );
                   break;
                 case Status.Authenticating:
                   return Text("Logging in");
                   break;
                 case Status.Authenticated:
-                  return GestureDetector(
-                    onTap: (){
-                      db.signOutWithGoogle();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
-                          Text("Log Out"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.logout),
-                          ),
-                        ] 
-                       
-                      
-                    ),
-                  );
+                  return Container();
                   break;
               }
-            },
-          ),
+            }),
+            Divider(
+            ),
+            Consumer<DbProvider>(
+              // ignore: missing_return
+              builder: (context, db, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Text("Logging in");
+                    break;
+                  case Status.Authenticated:
+                    return GestureDetector(
+                      onTap: (){
+                        db.signOutWithGoogle();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          children:[
+                            Text("Log Out",style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  
+                )),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.logout, color: Colors.white,),
+                            ),
+                          ] 
+                         
+                        
+                      ),
+                    );
+                    break;
+                }
+              },
+            ),
 
 
-        ]),
+          ]),
+        ),
       ),
       body: DefaultTabController(
         length: 4,
@@ -257,9 +317,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           body: TabBarView(
             children: pages,
           ),
+        
         ),
       ),
-      
+      // extendBody: true,
+      // bottomSheet: Icon(Icons.linked_camera),
     );
   }
 }

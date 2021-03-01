@@ -21,7 +21,7 @@ void main() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           brightness: Brightness.light,
-          primaryColor: Color(0xFF5654B4),
+          primaryColor: Color(0xFF03C6C7),
           accentColor: Colors.cyan),
     ),
   ));

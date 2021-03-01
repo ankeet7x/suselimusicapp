@@ -158,6 +158,7 @@ class MusicProvider extends ChangeNotifier {
           .map((e) => e.remainder(60).toString().padLeft(2, '0'))
           .join(':');
       maximumValue = d.inMilliseconds.toDouble();
+      
       notifyListeners();
       print(duration);
     });
@@ -171,6 +172,9 @@ class MusicProvider extends ChangeNotifier {
           .join(':');
       positioninS = p.inMilliseconds.toDouble();
       notifyListeners();
+      // if (positioninS == maximumValue){
+      //   increasecurrentIndex();
+      // }
     });
   }
 
