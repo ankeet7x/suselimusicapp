@@ -30,10 +30,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               child: Consumer<DbProvider>(builder: (context, db, child) {
             switch (db.status) {
               case Status.Unauthenticaed:
-                return Icon(Icons.person);
+                return CircleAvatar(
+                  radius: 45,
+                  backgroundColor: Colors.purple,
+                  child: Icon(Icons.person, color: Colors.white, size: 58,)
+                  );
                 break;
               case Status.Authenticating:
-                return CircularProgressIndicator();
+                return Text("Logging In");
                 break;
               case Status.Authenticated:
                 return Column(
@@ -79,7 +83,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   break;
                 case Status.Authenticated:
                   return MaterialButton(
-                    color: Colors.cyan,
+                    // color: Colors.cyan,
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -95,20 +99,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           Consumer<DbProvider>(builder: (context, db, child) {
             switch (db.status) {
               case Status.Unauthenticaed:
-                return IconButton(
-                    icon: Icon(
-                      Icons.login,
-                    ),
-                    onPressed: () {
-                      print("pressed");
+                return GestureDetector(
+                    onTap: (){
                       db.signInWithGoogle();
-                    });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children:[
+                          Text("Log In"),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.login),
+                          ),
+                        ]                   
+                    ),
+                  );
                 break;
               case Status.Authenticating:
-                return CircularProgressIndicator();
+                return Text("Logging in");
                 break;
               case Status.Authenticated:
-                return Text("You're logged in");
+                return Container();
                 break;
             }
           }),
@@ -122,14 +133,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   return Container();
                   break;
                 case Status.Authenticating:
-                  return CircularProgressIndicator();
+                  return Text("Logging in");
                   break;
                 case Status.Authenticated:
-                  return IconButton(
-                    icon: Icon(Icons.logout),
-                    onPressed: () {
+                  return GestureDetector(
+                    onTap: (){
                       db.signOutWithGoogle();
                     },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children:[
+                          Text("Log Out"),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.logout),
+                          ),
+                        ] 
+                       
+                      
+                    ),
                   );
                   break;
               }
@@ -183,7 +205,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           focusedBorder: InputBorder.none,
                           border: InputBorder.none,
                           prefixIcon: Icon(Icons.search, color: Colors.purple,),
-                          disabledBorder: InputBorder.none
+                          disabledBorder: InputBorder.none, 
                         ),
                       ),
                     )

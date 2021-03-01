@@ -50,6 +50,7 @@ class _BrowseSongsState extends State<BrowseSongs> {
                     : songProvider.netSongs[index].title),
                 onTap: () {
                   // print(index);
+                  songProvider.stop();
                   songProvider.setcurrentIndex(index);
                   songProvider
                       .playFromUrl(songProvider.netSongs[songProvider.currentIndex].songUrl);

@@ -17,6 +17,7 @@ class _UploadPageState extends State<UploadPage> {
   void dispose() {
     _titleController.dispose();
     _artistController.dispose();
+    
     super.dispose();
   }
 
@@ -34,18 +35,27 @@ class _UploadPageState extends State<UploadPage> {
             key: _formKey,
             child: Column(
               children: [
-                TextFormField(
-                  controller: _titleController,
-                  validator: (val) =>
-                      val.length < 3 ? "Please enter a valid title" : null,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.title), hintText: "Title"),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _titleController,
+                    validator: (val) =>
+                        val.length < 3 ? "Please enter a valid title" : null,
+                    decoration: InputDecoration(
+                      disabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      border: InputBorder.none,
+                        prefixIcon: Icon(Icons.title), hintText: "Title"),
+                  ),
                 ),
                 TextFormField(
                   controller: _artistController,
                   validator: (val) =>
                       val.length < 5 ? "Please enter artist's name" : null,
                   decoration: InputDecoration(
+                    disabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      border: InputBorder.none,
                       prefixIcon: Icon(Icons.person), hintText: "Artist"),
                 ),
               ],
@@ -58,13 +68,25 @@ class _UploadPageState extends State<UploadPage> {
                 // pro.selectSong();
               },
             ),
+          Consumer<DbProvider>(builder: (context, db, child){
+            if(db.mp3 == null){
+              return Container();
+            }else{
+              return Text(db.mp3.toString());
+            }
+          },),
            RaisedButton(
                 child: Text("Pick album art"),
                 onPressed: (){
                   db.getAlbumArt();
                 },
-              )
-        ,
+              ),
+              Consumer<DbProvider>(builder: (context, db, child){
+            if(db.albumArt == null){
+              return Container();
+            }else{
+              return Text(db.albumArt.toString());
+            }}),
           InkWell(
               splashColor: Colors.cyan,
               onTap: () async {
@@ -75,7 +97,7 @@ class _UploadPageState extends State<UploadPage> {
                     await db.uploadSong(
                         db.mp3, _titleController.text, _artistController.text, db.albumArt);
                     // Navigator.pop(context);
-
+                    
                     Future.delayed(Duration(seconds: 5), (){
                       netP.fetchSongsFromInternet();
                     });
@@ -99,10 +121,17 @@ class _UploadPageState extends State<UploadPage> {
                 break;
               case UploadingStatus.Uploaded:
                 return Text("Uploaded");
+                break; 
+              case UploadingStatus.Pop:
+                Navigator.pop(context);
                 break;
               case UploadingStatus.Free:
+                // Navigator.pop(context);
                 return Container();
                 break;
+              // default:
+              //   return Container();
+              //   break;
             }
           },)
           
@@ -111,3 +140,4 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 }
+ 

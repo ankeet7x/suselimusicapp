@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:suseli/models/songs.dart';
 
+
 class NetSongProvider extends ChangeNotifier {
   List<SongModel> netSongs = [];
   AudioPlayer audioPlayer = AudioPlayer();
@@ -81,11 +82,17 @@ class NetSongProvider extends ChangeNotifier {
   // Setting current index for skipping songs
   increasecurrentIndex() {
     currentIndex++;
+    if (currentIndex > netSongs.length-1){
+      currentIndex = 0;
+    }
     notifyListeners();
   }
 
   decreasecurrentIndex() {
     currentIndex--;
+    if (currentIndex < 0){
+      currentIndex = netSongs.length -1 ;
+    }
     notifyListeners();
   }
 
@@ -94,7 +101,8 @@ class NetSongProvider extends ChangeNotifier {
     stop();
     increasecurrentIndex();
     setcurrentIndex(currentIndex);
-    playFromUrl(currentIndex);
+    playFromUrl(netSongs[currentIndex].songUrl);
+    // playFromUrl(currentIndex);
     // print(currentIndex);
   }
 
@@ -102,7 +110,7 @@ class NetSongProvider extends ChangeNotifier {
     stop();
     decreasecurrentIndex();
     setcurrentIndex(currentIndex);
-    playFromUrl(currentIndex);
+    playFromUrl(netSongs[currentIndex].songUrl);
     // print(currentIndex);
   }
 

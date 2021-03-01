@@ -12,7 +12,7 @@ import 'package:random_string/random_string.dart';
 enum Status { Unauthenticaed, Authenticating, Authenticated }
 // enum UploadingStat {Free, Uploading, Uploaded}
 
-enum UploadingStatus {Uploading, Uploaded, Free}
+enum UploadingStatus {Uploading, Uploaded, Pop, Free}
 
 class DbProvider extends ChangeNotifier {
   Status status = Status.Unauthenticaed;
@@ -48,10 +48,14 @@ class DbProvider extends ChangeNotifier {
  
 
   Future<void> signOutWithGoogle() async {
-    await _signIn.signOut();
-    status = Status.Unauthenticaed;
-    notifyListeners();
-    print("signed out");
+    try{
+      await _signIn.signOut();
+      status = Status.Unauthenticaed;
+      notifyListeners();
+      print("signed out");
+      }catch(e){
+      print(e);
+    }
   }
 
   File mp3;
@@ -125,8 +129,13 @@ class DbProvider extends ChangeNotifier {
           FirebaseFirestore.instance.collection("Songs").add(songData).then((value) => print("Uploaded to db"));
           upStatus = UploadingStatus.Uploaded;
           notifyListeners();
+          Future.delayed(Duration(seconds: 1), (){
+            upStatus = UploadingStatus.Pop;
+            notifyListeners();
+          });
           Future.delayed(Duration(seconds: 3), (){
             upStatus = UploadingStatus.Free;
+            // Navigator.pop();
             notifyListeners();
           });
         });
