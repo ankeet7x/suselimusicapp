@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/pages/albumspage.dart';
 import 'package:suseli/pages/artistspage.dart';
+import 'package:suseli/pages/browseartists.dart';
 import 'package:suseli/pages/browsesongs.dart';
 import 'package:suseli/pages/classifypage.dart';
 import 'package:suseli/pages/genrespage.dart';
@@ -24,9 +25,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   iconTheme: IconThemeData(color: Colors.white),
-      // ),
       
       drawer: Drawer(
         
@@ -123,6 +121,34 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               ),
             ),
             Divider(
+            ),
+            Consumer<DbProvider>(
+              builder: (context, db, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    return MaterialButton(
+                      // color: Colors.cyan,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BrowseArtist()));
+                      },
+                      child: Text("Browse Artists",style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  
+                )),
+                    );
+                    break;
+                }
+              },
             ),
             Consumer<DbProvider>(
               builder: (context, db, child) {

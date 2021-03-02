@@ -36,22 +36,27 @@ class MusicProvider extends ChangeNotifier {
 
     // print(songList.length);
     songs = songList;
+    notifyListeners();
     return songs;
+    
   }
 
   void getArtistInfo() async {
     List<ArtistInfo> artistList = await audioQuery.getArtists();
     artists = artistList;
+    notifyListeners();
   }
 
   void getGenreInfo() async {
     List<GenreInfo> genreList = await audioQuery.getGenres();
     genres = genreList;
+    notifyListeners();
   }
 
   void getAlbumInfo() async{
     List<AlbumInfo> albumList = await audioQuery.getAlbums();
     albums = albumList;
+    notifyListeners();
   }
 
   
