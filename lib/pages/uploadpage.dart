@@ -162,7 +162,7 @@ class _UploadPageState extends State<UploadPage> {
         switch(db.upStatus){
           
           case UploadingStatus.Uploading:
-            return SpinKitPouringHourglass(color: Colors.purple);
+            return SpinKitPouringHourglass(color: Color(0xFF03C6C7));
             break;
           case UploadingStatus.Uploaded:
             return Text("Your song has been uploaded");

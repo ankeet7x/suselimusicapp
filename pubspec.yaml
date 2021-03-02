@@ -31,7 +31,6 @@ dependencies:
   audioplayers:
   flutter_audio_query:
   provider:
-  flutter_svg:
   cached_network_image: ^2.5.0
   image_picker: ^0.6.7+22
   firebase_storage: ^7.0.0
@@ -42,6 +41,7 @@ dependencies:
   file_picker: ^2.1.6
   flutter_spinkit: ^4.1.2+1
   fluttertoast: ^7.1.6
+  http: ^0.12.2
   random_string: ^2.1.0
   
 
