@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/provider/dbprovider.dart';
 import 'package:suseli/provider/netsongprovider.dart';
@@ -29,7 +30,9 @@ class _UploadPageState extends State<UploadPage> {
       appBar: AppBar(
         title: Text("Upload Page"),
       ),
-      body: Column(
+      body: Stack(
+        children: [
+          Column(
         children: [
           Form(
             key: _formKey,
@@ -89,10 +92,8 @@ class _UploadPageState extends State<UploadPage> {
             }}),
           Consumer<DbProvider>(builder: (context, db, child){
             switch(db.upStatus){
-              
-              
               case UploadingStatus.Uploading:
-                return CircularProgressIndicator();
+                return Text("");
                 break;
               case UploadingStatus.Uploaded:
                 return Text("Uploaded");
@@ -157,6 +158,26 @@ class _UploadPageState extends State<UploadPage> {
           
         ],
       ),
+      Consumer<DbProvider>(builder: (context, db, child) {
+        switch(db.upStatus){
+          
+          case UploadingStatus.Uploading:
+            return SpinKitPouringHourglass(color: Colors.purple);
+            break;
+          case UploadingStatus.Uploaded:
+            return Text("Your song has been uploaded");
+            break;
+          case UploadingStatus.Pop:
+            return Container();
+            break;
+          case UploadingStatus.Free:
+            return Container();
+            break;
+        }
+      })
+
+        ],
+      )
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:suseli/pages/albumspage.dart';
 import 'package:suseli/pages/artistspage.dart';
 import 'package:suseli/pages/browsesongs.dart';
+import 'package:suseli/pages/classifypage.dart';
 import 'package:suseli/pages/genrespage.dart';
 import 'package:suseli/pages/profile.dart';
 import 'package:suseli/pages/songspage.dart';
@@ -23,8 +24,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   iconTheme: IconThemeData(color: Colors.white),
+      // ),
       
       drawer: Drawer(
+        
         elevation: 10,
         child: Container(
           color: Color(0xFF03C6C7),
@@ -110,8 +115,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   netSong.netSongs.clear();
                   await netSong.fetchSongsFromInternet();
 
-                  Navigator.push(context,
+                  Future.delayed(Duration(seconds: 2), (){
+                    Navigator.push(context,
                       MaterialPageRoute(builder: (context) => BrowseSongs()));
+                  });
                 },
               ),
             ),
@@ -136,6 +143,34 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 builder: (context) => UploadPage()));
                       },
                       child: Text("Upload Page",style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  
+                )),
+                    );
+                    break;
+                }
+              },
+            ),
+            Consumer<DbProvider>(
+              builder: (context, db, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    return MaterialButton(
+                      // color: Colors.cyan,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Classifier()));
+                      },
+                      child: Text("Genre Page",style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                   
@@ -231,10 +266,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   isScrollable: false,
                   // labelColor: Color(0xFF5454f4),
                   // unselectedLabelColor: Colors.white,
-                  unselectedLabelColor: Colors.yellow,
-                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.white,
+                  labelColor: Colors.yellowAccent,
 
-                  indicatorColor: Colors.black,
+                  indicatorColor: Colors.yellowAccent,
                   tabs: [
                     Tab(
                       child: Text("Songs"),
@@ -264,7 +299,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         decoration: InputDecoration(
                           focusedBorder: InputBorder.none,
                           border: InputBorder.none,
-                          prefixIcon: Icon(Icons.search, color: Colors.purple,),
+                          prefixIcon: Icon(Icons.search, color: Color(0xFF03C6C7),),
                           disabledBorder: InputBorder.none, 
                         ),
                       ),

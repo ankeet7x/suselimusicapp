@@ -17,9 +17,11 @@ class _AlbumPageState extends State<AlbumPage> {
           title: Text(songP.songs[index].album),
           onTap: () {
             // print(songP.albums.length);
-            songP.albums.forEach((album) {
-              print(album.title + album.numberOfSongs);
-            });
+            print(songP.albums[index].numberOfSongs);
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => ))
+            // songP.albums.forEach((album) {
+            //   print("The songs are:" +album.title + album.numberOfSongs + album.numberOfSongs);
+            // });
           },
         ),
       ),

@@ -13,7 +13,8 @@ class MusicProvider extends ChangeNotifier {
 
   MusicProvider.initialize() {
     this.getSong();
-    // this.getArtistInfo();
+    this.getArtistInfo();
+    this.getAlbumInfo();
     this.getGenreInfo();
   }
 
@@ -30,11 +31,12 @@ class MusicProvider extends ChangeNotifier {
   List<GenreInfo> genres;
   List<AlbumInfo> albums;
 
-  void getSong() async {
+  Future<List<SongInfo>> getSong() async {
     List<SongInfo> songList = await audioQuery.getSongs();
 
     // print(songList.length);
     songs = songList;
+    return songs;
   }
 
   void getArtistInfo() async {
@@ -47,25 +49,20 @@ class MusicProvider extends ChangeNotifier {
     genres = genreList;
   }
 
+  void getAlbumInfo() async{
+    List<AlbumInfo> albumList = await audioQuery.getAlbums();
+    albums = albumList;
+  }
+
   
 
-  // For playing songs from local
-  bool play = false;
-  bool changedState = false;
 
-  updatePlay() {
-    if (play == false) {
-      play = true;
-    } else {
-      play = false;
-    }
-  }
+ 
 
   playLocal(index) async {
     int result = await audioPlayer.play(songs[index].filePath);
     if (result == 1) {
       print("Played");
-      changedState = true;
       // play = true;
     }
     notifyListeners();
