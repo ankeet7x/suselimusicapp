@@ -20,6 +20,8 @@ class ApiHelper extends ChangeNotifier {
       response.stream.transform(utf8.decoder).listen((event) {
         var data = jsonDecode(event);
         print(data['genre']);
+        genre = data['genre'];
+        notifyListeners();
       });
       // print(response.stream)
 

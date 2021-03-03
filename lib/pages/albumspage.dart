@@ -14,7 +14,7 @@ class _AlbumPageState extends State<AlbumPage> {
       builder: (context, songP, child) => ListView.builder(
         itemCount: songP.albums.length,
         itemBuilder: (context, index) => ListTile(
-          title: Text(songP.songs[index].album),
+          title: Text(songP.albums[index].numberOfSongs.toString()),
           onTap: () {
             // print(songP.albums.length);
             print(songP.albums[index].numberOfSongs);

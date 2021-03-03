@@ -29,9 +29,15 @@ class _ClassifierState extends State<Classifier> {
           RaisedButton(
             child: Text("Upload to server"),
             onPressed: (){
+              
               genrePro.postSong(filePro.mp3.path);
             }
-          )
+          ),
+          Consumer<ApiHelper>(builder: (context, gen, child) {
+            return Container(
+              child: gen.genre == null ? Text('No') : Text(gen.genre),
+            );
+          },)
         ],
       )
       

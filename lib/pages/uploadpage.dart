@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/provider/dbprovider.dart';
 import 'package:suseli/provider/netsongprovider.dart';
+import 'package:suseli/widgets/songuploadfields.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -26,119 +27,147 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     final db = Provider.of<DbProvider>(context);
     final netP = Provider.of<NetSongProvider>(context);
+    final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: Text("Upload Page"),
         ),
-        body: Stack(
-          children: [
+        body: 
             Column(
               children: [
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: _titleController,
-                          validator: (val) => val.length < 3
-                              ? "Please enter a valid title"
-                              : null,
-                          decoration: InputDecoration(
-                              disabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              border: InputBorder.none,
-                              prefixIcon: Icon(Icons.title),
-                              hintText: "Title"),
-                        ),
+                      StyledTf(
+                        hintText: "Title",
+                        getController: _titleController,
+                        artistN: "Artist",
                       ),
-                      TextFormField(
-                        controller: _artistController,
-                        validator: (val) => val.length < 5
-                            ? "Please enter artist's name"
-                            : null,
-                        decoration: InputDecoration(
-                            disabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            border: InputBorder.none,
-                            prefixIcon: Icon(Icons.person),
-                            hintText: "Artist"),
+                      StyledTf(
+                        hintText: "Artist",
+                        getController: _artistController,
+                        artistN: "Artist",
                       ),
                     ],
                   ),
                 ),
-                RaisedButton(
-                  child: Text("Select your song"),
-                  onPressed: () {
-                    db.selectSong();
-                    // pro.selectSong();
-                  },
-                ),
                 Consumer<DbProvider>(
-                  builder: (context, db, child) {
-                    if (db.mp3 == null) {
-                      return Container();
-                    } else {
-                      return Text(db.mp3.toString());
-                    }
-                  },
+                  builder: (context, db, child) => Container(
+                    child: db.mp3 == null ? RaisedButton(
+                      child:  Text("Select your song"),
+                      onPressed: () {
+                        db.selectSong();
+                        // pro.selectSong();
+                      },
+                    ) : Text(db.mp3.uri.toString()),
+                  ),
                 ),
-                RaisedButton(
-                  child: Text("Pick album art"),
-                  onPressed: () {
-                    db.getAlbumArt();
-                  },
+                // Consumer<DbProvider>(
+                //   builder: (context, db, child) {
+                //     if (db.mp3 == null) {
+                //       return Container();
+                //     } else {
+                //       return Text(db.mp3.toString());
+                //     }
+                //   },
+                // ),
+
+                Consumer<DbProvider>(
+                  builder: (context, db, child) => Container(
+                    height: size.height * 0.3,
+                    width: size.width * 0.8,
+                    child: GestureDetector(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: db.albumArt == null
+                            ? Center(
+                                child: IconButton(
+                                icon: Icon(Icons.add_a_photo),
+                                onPressed: () {
+                                  db.getAlbumArt();
+                                },
+                              ))
+                            : Image.file(
+                                db.albumArt,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ),
+                  ),
                 ),
-                Consumer<DbProvider>(builder: (context, db, child) {
-                  if (db.albumArt == null) {
-                    return Container();
-                  } else {
-                    return Text(db.albumArt.toString());
-                  }
-                }),
+
                 Consumer<DbProvider>(
                   builder: (context, db, child) {
                     switch (db.upStatus) {
                       case UploadingStatus.Uploading:
-                        return Text("");
+                        return Container(
+                          height: size.height * 0.05,
+                          width: size.width * 0.35,
+                          color: Color(0xFF03C6C7),
+                          child: Center(
+                            child:
+                              SpinKitThreeBounce(color: Colors.white, size: 25,)
+                              
+                            
+                          ),
+                        );
                         break;
                       case UploadingStatus.Uploaded:
-                        return Text("Uploaded");
+                        return Container(
+                          height: size.height * 0.05,
+                          width: size.width * 0.35,
+                          color: Color(0xFF03C6C7),
+                          child: Row(
+                            children: [
+                              Icon(Icons.check),
+                              Text("Uploaded")
+                            ],
+                          ),
+                        );
                         break;
                       case UploadingStatus.Pop:
                         Navigator.pop(context);
                         break;
                       case UploadingStatus.Free:
-                        return InkWell(
-                            splashColor: Colors.cyan,
-                            onTap: () async {
-                              try {
-                                if (_formKey.currentState.validate()) {
-                                  _formKey.currentState.save();
-                                  print("Uploading");
-                                  await db.uploadSong(
-                                      db.mp3,
-                                      _titleController.text,
-                                      _artistController.text,
-                                      db.albumArt);
-                                  // Navigator.pop(context);
+                        return Container(
+                          height: size.height * 0.05,
+                          width: size.width * 0.35,
 
-                                  Future.delayed(Duration(seconds: 5), () {
-                                    netP.fetchSongsFromInternet();
-                                  });
+                          child: RaisedButton(
+                            
+                            color: Color(0xFF03C6C7),
+                            
+                              onPressed: () async {
+                                try {
+                                  if (_formKey.currentState.validate()) {
+                                    _formKey.currentState.save();
+                                    print("Uploading");
+                                    await db.uploadSong(
+                                        db.mp3,
+                                        _titleController.text,
+                                        _artistController.text,
+                                        db.albumArt);
+                                    // Navigator.pop(context);
+
+                                    Future.delayed(Duration(seconds: 5), () {
+                                      netP.fetchSongsFromInternet();
+                                    });
+                                  }
+                                } catch (e) {
+                                  print(e.toString());
                                 }
-                              } catch (e) {
-                                print(e.toString());
-                              }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.upload_file),
-                                Text("Upload")
-                              ],
-                            ));
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.upload_file, color: Colors.white,),
+                                  Text("Upload", style: TextStyle(
+                                    color: Colors.white
+                                  ),)
+                                ],
+                              )),
+                        );
                     }
                   },
                 ),
@@ -168,23 +197,23 @@ class _UploadPageState extends State<UploadPage> {
                 // },)
               ],
             ),
-            Consumer<DbProvider>(builder: (context, db, child) {
-              switch (db.upStatus) {
-                case UploadingStatus.Uploading:
-                  return SpinKitPouringHourglass(color: Color(0xFF03C6C7));
-                  break;
-                case UploadingStatus.Uploaded:
-                  return Text("Your song has been uploaded");
-                  break;
-                case UploadingStatus.Pop:
-                  return Container();
-                  break;
-                case UploadingStatus.Free:
-                  return Container();
-                  break;
-              }
-            })
-          ],
-        ));
+            // Consumer<DbProvider>(builder: (context, db, child) {
+            //   switch (db.upStatus) {
+            //     case UploadingStatus.Uploading:
+            //       return SpinKitPouringHourglass(color: Color(0xFF03C6C7));
+            //       break;
+            //     case UploadingStatus.Uploaded:
+            //       return Text("Your song has been uploaded");
+            //       break;
+            //     case UploadingStatus.Pop:
+            //       return Container();
+            //       break;
+            //     case UploadingStatus.Free:
+            //       return Container();
+            //       break;
+            //   }
+            // })
+        
+        );
   }
 }

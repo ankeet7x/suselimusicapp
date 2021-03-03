@@ -117,7 +117,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   netSong.netSongs.clear();
                   await netSong.fetchSongsFromInternet();
 
-                  Future.delayed(Duration(seconds: 2), () {
+                  Future.delayed(Duration(milliseconds: 100), () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => BrowseSongs()));
                   });

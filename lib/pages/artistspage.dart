@@ -14,7 +14,7 @@ class _ArtistPageState extends State<ArtistPage> {
       builder: (context, songP, child) => ListView.builder(
         itemCount: songP.artists.length,
         itemBuilder: (context, index) => ListTile(
-          title: Text(songP.songs[index].artist),
+          title: Text(songP.artists[index].name),
           onTap: () {},
         ),
       ),

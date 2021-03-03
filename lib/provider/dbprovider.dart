@@ -184,7 +184,7 @@ class DbProvider extends ChangeNotifier {
           notifyListeners();
           Map<String, dynamic> artistData = {
             'profileImg': profileImgUrl,
-            'coverImg': downUrl,
+            'coverImg': coverImgUrl,
             'name': name,
             'bio': bio,
             'username': username
