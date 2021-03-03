@@ -12,7 +12,6 @@ class _BrowseArtistState extends State<BrowseArtist> {
       appBar: AppBar(
         title: Text("Browse Artists"),
       ),
-      
     );
   }
 }

@@ -25,9 +25,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       drawer: Drawer(
-        
         elevation: 10,
         child: Container(
           color: Color(0xFF03C6C7),
@@ -38,10 +36,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               switch (db.status) {
                 case Status.Unauthenticaed:
                   return CircleAvatar(
-                    radius: 45,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, color: Color(0xFF03C6C7), size: 58,)
-                    );
+                      radius: 45,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.person,
+                        color: Color(0xFF03C6C7),
+                        size: 58,
+                      ));
                   break;
                 case Status.Authenticating:
                   return Text("Logging In");
@@ -50,29 +51,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   return Column(
                     children: [
                       CircleAvatar(
-                        radius: 45,
-                        child: ClipRRect(
+                          radius: 45,
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
                             child: CachedNetworkImage(
                               imageUrl: db.user.photoURL,
                               placeholder: (context, url) => Container(),
-                               errorWidget: (context, url, error) => Icon(Icons.error),
-                            ),)
-                      ),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
+                          )),
                       SizedBox(height: 5),
-                      Text(db.user.displayName, style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18
-                      ),),
-                      
+                      Text(
+                        db.user.displayName,
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
                     ],
                   );
                   break;
               }
             })),
-            Consumer<DbProvider>(builder: (context, db, child){
-              switch(db.status){
-                
+            Consumer<DbProvider>(builder: (context, db, child) {
+              switch (db.status) {
                 case Status.Unauthenticaed:
                   return Container();
                   break;
@@ -80,48 +80,51 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   return Container();
                   break;
                 case Status.Authenticated:
-                  return Consumer<NetSongProvider>(builder: (context, netSong, child) => MaterialButton(
-              child: Text("Profile",style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    
-                ),
-                
-                ),
-                onPressed: () async{
-                    netSong.netSongs.clear();
-                    await netSong.fetchSongsFromInternet();
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => ProfilePage()
-                    ));
-                },
-            ),
+                  return Consumer<NetSongProvider>(
+                    builder: (context, netSong, child) => MaterialButton(
+                      child: Text(
+                        "Profile",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {
+                        netSong.netSongs.clear();
+                        await netSong.fetchSongsFromInternet();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
+                      },
+                    ),
                   );
                   break;
               }
             }),
-            
+
             Consumer<NetSongProvider>(
               builder: (context, netSong, child) => MaterialButton(
-                child: Text("Browse Songs",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  
-                ),),
+                child: Text(
+                  "Browse Songs",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
                 onPressed: () async {
                   // await db.();
                   netSong.netSongs.clear();
                   await netSong.fetchSongsFromInternet();
 
-                  Future.delayed(Duration(seconds: 2), (){
+                  Future.delayed(Duration(seconds: 2), () {
                     Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => BrowseSongs()));
+                        MaterialPageRoute(builder: (context) => BrowseSongs()));
                   });
                 },
               ),
             ),
-            Divider(
-            ),
+            Divider(),
             Consumer<DbProvider>(
               builder: (context, db, child) {
                 switch (db.status) {
@@ -140,11 +143,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             MaterialPageRoute(
                                 builder: (context) => BrowseArtist()));
                       },
-                      child: Text("Browse Artists",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  
-                )),
+                      child: Text("Browse Artists",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          )),
                     );
                     break;
                 }
@@ -168,11 +171,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             MaterialPageRoute(
                                 builder: (context) => UploadPage()));
                       },
-                      child: Text("Upload Page",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  
-                )),
+                      child: Text("Upload Page",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          )),
                     );
                     break;
                 }
@@ -196,11 +199,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             MaterialPageRoute(
                                 builder: (context) => Classifier()));
                       },
-                      child: Text("Genre Page",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  
-                )),
+                      child: Text("Genre Page",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          )),
                     );
                     break;
                 }
@@ -212,24 +215,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               switch (db.status) {
                 case Status.Unauthenticaed:
                   return GestureDetector(
-                      onTap: (){
-                        db.signInWithGoogle();
-                      },
-                      child: Row(
+                    onTap: () {
+                      db.signInWithGoogle();
+                    },
+                    child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            Text("Log In",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  
-                )),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.login),
-                            ),
-                          ]                   
-                      ),
-                    );
+                        children: [
+                          Text("Log In",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.login),
+                          ),
+                        ]),
+                  );
                   break;
                 case Status.Authenticating:
                   return Text("Logging in");
@@ -239,8 +241,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   break;
               }
             }),
-            Divider(
-            ),
+            Divider(),
             Consumer<DbProvider>(
               // ignore: missing_return
               builder: (context, db, child) {
@@ -253,32 +254,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     break;
                   case Status.Authenticated:
                     return GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         db.signOutWithGoogle();
                       },
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            Text("Log Out",style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  
-                )),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Log Out",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                )),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.logout, color: Colors.white,),
+                              child: Icon(
+                                Icons.logout,
+                                color: Colors.white,
+                              ),
                             ),
-                          ] 
-                         
-                        
-                      ),
+                          ]),
                     );
                     break;
                 }
               },
             ),
-
-
           ]),
         ),
       ),
@@ -316,29 +315,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 title: Container(
                   width: 280,
                   height: 45,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white.withOpacity(0.9)),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white.withOpacity(0.9)),
                   child: Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(1.0, 8, 8, 8),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          focusedBorder: InputBorder.none,
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Icons.search, color: Color(0xFF03C6C7),),
-                          disabledBorder: InputBorder.none, 
+                      child: Padding(
+                    padding: const EdgeInsets.fromLTRB(1.0, 8, 8, 8),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Color(0xFF03C6C7),
                         ),
+                        disabledBorder: InputBorder.none,
                       ),
-                    )
-                  ),
+                    ),
+                  )),
                 ),
-                
+
                 // backgroundColor: Color(0xFF5454f4),
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.none,
                   title: Padding(
-                    padding: const EdgeInsets.only(bottom:28.0),
+                    padding: const EdgeInsets.only(bottom: 28.0),
                     // child: Text("Suseli"),
                   ),
                   // title: Padding(
@@ -378,7 +381,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           body: TabBarView(
             children: pages,
           ),
-        
         ),
       ),
       // extendBody: true,

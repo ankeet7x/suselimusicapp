@@ -52,19 +52,23 @@ class _MusicPageState extends State<MusicPage> {
               Container(
                 height: 200,
                 width: 200,
-                child: widget.source == 'local' ? CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: AssetImage(
-                    "assets/download.jpeg",
-                  ) ,
-                ): ClipRRect(
-                  borderRadius: BorderRadius.circular(150),
-                  child: CachedNetworkImage(
-                      imageUrl: netPro.netSongs[netPro.currentIndex].imageUrl,
-                      placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-                    )
-                ),
+                child: widget.source == 'local'
+                    ? CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage(
+                          "assets/download.jpeg",
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(150),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              netPro.netSongs[netPro.currentIndex].imageUrl,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        )),
               ),
               SizedBox(
                 height: size.height * 0.1,
@@ -214,7 +218,7 @@ class _MusicPageState extends State<MusicPage> {
                                     AudioPlayerState.PLAYING) {
                                   netPro.pause();
                                 } else if (netPro.playerState ==
-                                    AudioPlayerState.PAUSED) { 
+                                    AudioPlayerState.PAUSED) {
                                   netPro.resume();
                                 }
                               },

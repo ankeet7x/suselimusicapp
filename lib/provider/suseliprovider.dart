@@ -33,12 +33,10 @@ class MusicProvider extends ChangeNotifier {
 
   Future<List<SongInfo>> getSong() async {
     List<SongInfo> songList = await audioQuery.getSongs();
-
     // print(songList.length);
     songs = songList;
     notifyListeners();
     return songs;
-    
   }
 
   void getArtistInfo() async {
@@ -53,16 +51,11 @@ class MusicProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getAlbumInfo() async{
+  void getAlbumInfo() async {
     List<AlbumInfo> albumList = await audioQuery.getAlbums();
     albums = albumList;
     notifyListeners();
   }
-
-  
-
-
- 
 
   playLocal(index) async {
     int result = await audioPlayer.play(songs[index].filePath);
@@ -160,7 +153,7 @@ class MusicProvider extends ChangeNotifier {
           .map((e) => e.remainder(60).toString().padLeft(2, '0'))
           .join(':');
       maximumValue = d.inMilliseconds.toDouble();
-      
+
       notifyListeners();
       print(duration);
     });

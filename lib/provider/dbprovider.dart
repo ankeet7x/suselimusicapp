@@ -12,7 +12,8 @@ import 'package:random_string/random_string.dart';
 enum Status { Unauthenticaed, Authenticating, Authenticated }
 // enum UploadingStat {Free, Uploading, Uploaded}
 
-enum UploadingStatus {Uploading, Uploaded, Pop, Free}
+enum UploadingStatus { Uploading, Uploaded, Pop, Free }
+enum ProfileUpdateStatus{Updating, Updated, Pop, Free}
 
 class DbProvider extends ChangeNotifier {
   Status status = Status.Unauthenticaed;
@@ -40,20 +41,17 @@ class DbProvider extends ChangeNotifier {
       status = Status.Authenticated;
       notifyListeners();
     } catch (e) {
-      
       print(e.toString());
     }
   }
 
- 
-
   Future<void> signOutWithGoogle() async {
-    try{
+    try {
       await _signIn.signOut();
       status = Status.Unauthenticaed;
       notifyListeners();
       print("signed out");
-      }catch(e){
+    } catch (e) {
       print(e);
     }
   }
@@ -76,15 +74,13 @@ class DbProvider extends ChangeNotifier {
 
   File albumArt;
   final picker = ImagePicker();
-  getAlbumArt() async{
+  getAlbumArt() async {
     final pickedImage = await picker.getImage(source: ImageSource.gallery);
-    if (pickedImage != null){
+    if (pickedImage != null) {
       albumArt = File(pickedImage.path);
       notifyListeners();
     }
-
   }
-
 
   String url;
   String imgUrl;
@@ -103,61 +99,110 @@ class DbProvider extends ChangeNotifier {
           .ref()
           .child("Song")
           .child('${randomAlphaNumeric(9)}.mp3');
-    Reference coverImageRef = FirebaseStorage.instance
+      Reference coverImageRef = FirebaseStorage.instance
           .ref()
           .child("Cover")
           .child('${randomAlphaNumeric(9)}.mp3');
       UploadTask task = songRef.putFile(song);
       UploadTask imgUpload = coverImageRef.putFile(coverImage);
 
-      
       imgUpload.then((res) => res.ref.getDownloadURL().then((String result) {
-        imgUrl = result;
-        notifyListeners();
-        Future.delayed(const Duration(seconds: 2),(){
-          task.then((res) {
-        res.ref.getDownloadURL().then((String dataUrl) {
-          url = dataUrl;
-          Map<String, dynamic> songData = {
-            'title': title,
-            'artist': artist,
-            'uploadedBy': user.email,
-            'imageUrl': imgUrl,
-            'songUrl': dataUrl
-          };
-          print('Adding data for fs');
-          FirebaseFirestore.instance.collection("Songs").add(songData).then((value) => print("Uploaded to db"));
-          upStatus = UploadingStatus.Uploaded;
-          notifyListeners();
-          Future.delayed(Duration(seconds: 1), (){
-            upStatus = UploadingStatus.Pop;
+            imgUrl = result;
             notifyListeners();
-          });
-          Future.delayed(Duration(seconds: 3), (){
-            upStatus = UploadingStatus.Free;
-            // Navigator.pop();
-            notifyListeners();
-          });
-        });
-      });
-          
-
-    });
-      }));
-      
-
+            Future.delayed(const Duration(seconds: 2), () {
+              task.then((res) {
+                res.ref.getDownloadURL().then((String dataUrl) {
+                  url = dataUrl;
+                  Map<String, dynamic> songData = {
+                    'title': title,
+                    'artist': artist,
+                    'uploadedBy': user.email,
+                    'imageUrl': imgUrl,
+                    'songUrl': dataUrl
+                  };
+                  print('Adding data for fs');
+                  FirebaseFirestore.instance
+                      .collection("Songs")
+                      .add(songData)
+                      .then((value) => print("Uploaded to db"));
+                  upStatus = UploadingStatus.Uploaded;
+                  notifyListeners();
+                  Future.delayed(Duration(seconds: 1), () {
+                    upStatus = UploadingStatus.Pop;
+                    notifyListeners();
+                  });
+                  Future.delayed(Duration(seconds: 3), () {
+                    upStatus = UploadingStatus.Free;
+                    // Navigator.pop();
+                    notifyListeners();
+                  });
+                });
+              });
+            });
+          }));
     }
     notifyListeners();
-
-
-    
-
-
-
   }
 
+  ProfileUpdateStatus profileUpdateStatus = ProfileUpdateStatus.Free;
   
+  File profileImgFile;
+  File coverImgFile;
 
+  profileImgPicker() async{
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      profileImgFile = File(pickedImage.path);
+      notifyListeners();
+    }
+  }
+  coverImgPicker() async{
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      coverImgFile = File(pickedImage.path);
+      notifyListeners();
+    }
+  }
+
+
+  String profileImgUrl;
+  String coverImgUrl;
+  updateArtistProfile(profileImg, coverImg, bio, username, name){
+    
+      profileUpdateStatus = ProfileUpdateStatus.Updating;
+      notifyListeners();
+      Reference profileImgRef = FirebaseStorage.instance.ref().child("profile-pic")
+          .child('${randomAlphaNumeric(9)}.jpg');
+      Reference coverImgRef = FirebaseStorage.instance.ref().child("cover-img").child('${randomAlpha(9)}.jpg');
+      UploadTask task = profileImgRef.putFile(profileImg);
+      UploadTask imgUpload = coverImgRef.putFile(coverImg);
+      task.then((res) => res.ref.getDownloadURL().then((String url){
+        profileImgUrl = url;
+        notifyListeners();
+        imgUpload.then((res) => res.ref.getDownloadURL().then((String downUrl) {
+          coverImgUrl = downUrl;
+          notifyListeners();
+          Map<String, dynamic> artistData = {
+            'profileImg': profileImgUrl,
+            'coverImg': downUrl,
+            'name': name,
+            'bio': bio,
+            'username': username
+          };
+          FirebaseFirestore.instance.collection("Artists").doc(user.email).set(artistData).then((value) => print("Uploaded to db"));
+          profileUpdateStatus = ProfileUpdateStatus.Updated;
+          notifyListeners();
+          Future.delayed(Duration(seconds: 2), (){
+            profileUpdateStatus = ProfileUpdateStatus.Pop;
+            notifyListeners();
+
+          });
+          profileUpdateStatus = ProfileUpdateStatus.Free;
+          notifyListeners();
+        }));
+      }));
+    }
+  
 
 
 }
