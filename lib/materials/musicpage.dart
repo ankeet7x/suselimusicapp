@@ -144,9 +144,9 @@ class _MusicPageState extends State<MusicPage> {
                               netPro.position,
                               style: TextStyle(fontSize: 15),
                             )),
-                  Expanded(
-                    child: Container(),
-                  ),
+                  // Expanded(
+                  //   child: Container(),
+                  // ),
                   Container(
                       margin: EdgeInsets.only(right: 22),
                       child: widget.source == 'local'

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/materials/musicpage.dart';
+import 'package:suseli/provider/netsongprovider.dart';
 import 'package:suseli/provider/suseliprovider.dart';
 
 class SongPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class _SongPageState extends State<SongPage> {
   @override
   Widget build(BuildContext context) {
     final songP = Provider.of<MusicProvider>(context);
+    final netProvider = Provider.of<NetSongProvider>(context);
     final height = MediaQuery.of(context).size.height;
     return Container(
       height: height,
@@ -32,6 +34,7 @@ class _SongPageState extends State<SongPage> {
                   ),
                   onLongPress: () {},
                   onTap: () {
+                    netProvider.stop();
                     songP.stop();
                     songP.playLocal(index);
                     songP.setcurrentIndex(index);

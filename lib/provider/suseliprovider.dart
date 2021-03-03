@@ -2,6 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 
+enum MusicState {Playing, Paused, Idle}
+
 class MusicProvider extends ChangeNotifier {
   // MusicProvider() {
   //   this.getSong();
@@ -16,7 +18,11 @@ class MusicProvider extends ChangeNotifier {
     this.getArtistInfo();
     this.getAlbumInfo();
     this.getGenreInfo();
+    // this.enumPlayerState();
   }
+
+  MusicState musicState = MusicState.Idle;
+  
 
   //Colors
   Color bgColor = const Color(0xFF2a27d0);
@@ -60,7 +66,9 @@ class MusicProvider extends ChangeNotifier {
   playLocal(index) async {
     int result = await audioPlayer.play(songs[index].filePath);
     if (result == 1) {
-      print("Played");
+      // print("Played");
+      musicState = MusicState.Playing;
+      notifyListeners();
       // play = true;
     }
     notifyListeners();
@@ -71,7 +79,9 @@ class MusicProvider extends ChangeNotifier {
   pause() async {
     int result = await audioPlayer.pause();
     if (result == 1) {
-      print("Paused");
+      // print("Paused");
+      musicState = MusicState.Paused;
+      notifyListeners();
       // play = false;
     }
     notifyListeners();
@@ -81,7 +91,8 @@ class MusicProvider extends ChangeNotifier {
   resume() async {
     int result = await audioPlayer.resume();
     if (result == 1) {
-      print("Resumed");
+      // print("Resumed");
+      musicState = MusicState.Playing;
       // play = true;
     }
   }
@@ -90,11 +101,14 @@ class MusicProvider extends ChangeNotifier {
   stop() async {
     int result = await audioPlayer.stop();
     if (result == 1) {
-      print("Stopped");
+      // print("Stopped");
+      musicState = MusicState.Idle;
       // play = false;
     }
     notifyListeners();
   }
+
+
 
   int currentIndex;
 
@@ -155,7 +169,7 @@ class MusicProvider extends ChangeNotifier {
       maximumValue = d.inMilliseconds.toDouble();
 
       notifyListeners();
-      print(duration);
+      // print(duration);
     });
   }
 

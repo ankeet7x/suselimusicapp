@@ -12,9 +12,10 @@ class _GenrePageState extends State<GenrePage> {
   Widget build(BuildContext context) {
     return Consumer<MusicProvider>(
       builder: (context, songP, child) => ListView.builder(
-        itemCount: songP.artists.length,
+        itemCount: songP.genres.length,
         itemBuilder: (context, index) => ListTile(
-          title: Text(songP.songs[index].artist),
+          title: Text(songP.genres[index].name),
+        
           onTap: () => print(songP.genres.length),
         ),
       ),

@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:suseli/models/songs.dart';
 
+enum NetPlayerState { Playing, Paused, Idle }
+
 class NetSongProvider extends ChangeNotifier {
   List<SongModel> netSongs = [];
   AudioPlayer audioPlayer = AudioPlayer();
@@ -28,6 +30,8 @@ class NetSongProvider extends ChangeNotifier {
         notifyListeners();
       });
 
+  NetPlayerState netPlayerState = NetPlayerState.Idle;
+
   // For playing songs from url
   playFromUrl(link) async {
     // String url = 'http://suseli.org/api/songs/2/stream';
@@ -36,7 +40,9 @@ class NetSongProvider extends ChangeNotifier {
     await audioPlayer.stop();
     int result = await audioPlayer.play(link);
     if (result == 1) {
-      print("Played from Url");
+      // print("Played from Url");
+      netPlayerState = NetPlayerState.Playing;
+      notifyListeners();
     }
     getDuration();
     getPosition();
@@ -45,8 +51,9 @@ class NetSongProvider extends ChangeNotifier {
   pause() async {
     int result = await audioPlayer.pause();
     if (result == 1) {
-      print("Paused");
-      // play = false;
+      // print("Paused");
+      netPlayerState = NetPlayerState.Paused;
+      notifyListeners();
     }
     notifyListeners();
   }
@@ -55,7 +62,9 @@ class NetSongProvider extends ChangeNotifier {
   resume() async {
     int result = await audioPlayer.resume();
     if (result == 1) {
-      print("Resumed");
+      // print("Resumed");
+      netPlayerState = NetPlayerState.Playing;
+      notifyListeners();
       // play = true;
     }
   }
@@ -64,8 +73,8 @@ class NetSongProvider extends ChangeNotifier {
   stop() async {
     int result = await audioPlayer.stop();
     if (result == 1) {
-      print("Stopped");
-      // play = false;
+      // print("Stopped");
+      netPlayerState = NetPlayerState.Idle;
     }
     notifyListeners();
   }
@@ -135,7 +144,7 @@ class NetSongProvider extends ChangeNotifier {
           .join(':');
       maximumValue = d.inMilliseconds.toDouble();
       notifyListeners();
-      print(duration);
+      // print(duration);
     });
   }
 

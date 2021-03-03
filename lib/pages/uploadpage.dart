@@ -42,12 +42,14 @@ class _UploadPageState extends State<UploadPage> {
                       StyledTf(
                         hintText: "Title",
                         getController: _titleController,
-                        artistN: "Artist",
+                        artistN: "Title",
+                        labelText: "Title",
                       ),
                       StyledTf(
                         hintText: "Artist",
                         getController: _artistController,
                         artistN: "Artist",
+                        labelText: "Artist",
                       ),
                     ],
                   ),
@@ -74,24 +76,32 @@ class _UploadPageState extends State<UploadPage> {
                 // ),
 
                 Consumer<DbProvider>(
-                  builder: (context, db, child) => Container(
-                    height: size.height * 0.3,
-                    width: size.width * 0.8,
-                    child: GestureDetector(
-                      child: ClipRRect(
+                  builder: (context, db, child) => Padding(
+                    padding: const EdgeInsets.fromLTRB(5,10, 0 ,10),
+                    child: Container(
+                      // color: Colors.grey,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
                         borderRadius: BorderRadius.circular(25),
-                        child: db.albumArt == null
-                            ? Center(
-                                child: IconButton(
-                                icon: Icon(Icons.add_a_photo),
-                                onPressed: () {
-                                  db.getAlbumArt();
-                                },
-                              ))
-                            : Image.file(
-                                db.albumArt,
-                                fit: BoxFit.cover,
-                              ),
+                      ),
+                      height: size.height * 0.3,
+                      width: size.width * 0.8,
+                      child: GestureDetector(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: db.albumArt == null
+                              ? Center(
+                                  child: IconButton(
+                                  icon: Icon(Icons.add_a_photo),
+                                  onPressed: () {
+                                    db.getAlbumArt();
+                                  },
+                                ))
+                              : Image.file(
+                                  db.albumArt,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
                       ),
                     ),
                   ),

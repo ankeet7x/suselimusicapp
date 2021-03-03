@@ -4,8 +4,9 @@ class StyledTf extends StatelessWidget {
   final TextEditingController getController;
   final String hintText;
   final String artistN;
+  final String labelText;
   // final TextEditingController _
-  StyledTf({this.getController, this.hintText, this.artistN});
+  StyledTf({this.getController, this.hintText, this.artistN, this.labelText});
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +24,19 @@ class StyledTf extends StatelessWidget {
           validator: (val) =>
               val.length < 3 ? "Check if this textfield is valid" : null,
           decoration: InputDecoration(
-              disabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              border: InputBorder.none,
-              // prefixIcon: Icon(Icons.title),
-              hintStyle: TextStyle(color: Colors.white),
-              counterStyle: TextStyle(color: Colors.blue),
-              helperStyle: TextStyle(color: Colors.blue),
-              prefixStyle: TextStyle(color: Colors.blue),
-              contentPadding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              hintText: hintText),
+            disabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            border: InputBorder.none,
+            // prefixIcon: Icon(Icons.title),
+            hintStyle: TextStyle(color: Colors.white),
+            counterStyle: TextStyle(color: Colors.blue),
+            helperStyle: TextStyle(color: Colors.blue),
+            prefixStyle: TextStyle(color: Colors.blue),
+            labelStyle: TextStyle(color: Colors.white),
+            contentPadding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+            hintText: hintText,
+            labelText: labelText,
+          ),
         ),
       ),
     );

@@ -133,6 +133,7 @@ class DbProvider extends ChangeNotifier {
                   });
                   Future.delayed(Duration(seconds: 3), () {
                     upStatus = UploadingStatus.Free;
+                    
                     // Navigator.pop();
                     notifyListeners();
                   });
@@ -187,7 +188,8 @@ class DbProvider extends ChangeNotifier {
             'coverImg': coverImgUrl,
             'name': name,
             'bio': bio,
-            'username': username
+            'username': username,
+            'email': user.email,
           };
           FirebaseFirestore.instance.collection("Artists").doc(user.email).set(artistData).then((value) => print("Uploaded to db"));
           profileUpdateStatus = ProfileUpdateStatus.Updated;
