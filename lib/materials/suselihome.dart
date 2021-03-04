@@ -38,7 +38,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       drawer: Drawer(
         elevation: 10,
         child: Container(
-          color: Color(0xFF03C6C7),
+          color: Colors.white,
           child: Column(children: [
             DrawerHeader(
                 // ignore: missing_return
@@ -47,15 +47,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 case Status.Unauthenticaed:
                   return CircleAvatar(
                       radius: 45,
-                      backgroundColor: Colors.white,
+                      backgroundColor: Color(0xFF5654B4),
                       child: Icon(
                         Icons.person,
-                        color: Color(0xFF03C6C7),
+                        color: Colors.white,
                         size: 58,
                       ));
                   break;
                 case Status.Authenticating:
-                  return Text("Logging In");
+                  return Container();
                   break;
                 case Status.Authenticated:
                   return Column(
@@ -74,53 +74,46 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       SizedBox(height: 5),
                       Text(
                         db.user.displayName,
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        style: TextStyle(color: Color(0xFF5654B4), fontSize: 18),
                       ),
                     ],
                   );
                   break;
               }
             })),
-            Consumer<DbProvider>(
-              builder: (context, db, child) {
-                switch (db.status) {
-                  case Status.Unauthenticaed:
-                    return Container();
-                    break;
-                  case Status.Authenticating:
-                    return Container();
-                    break;
-                  case Status.Authenticated:
-                    switch (artistProvider.gotArtistProfileStatus) {
-                      case GotArtistProfileStatus.Not_Yet:
-                        return Container();
-                        break;
-                      case GotArtistProfileStatus.Got:
-                        return MaterialButton(
-                          child: Text(
-                            "View Your Artist Profile",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onPressed: () async {
-                            await artistProvider
-                                .getCertainArtist(db.user.email);
-                            // netSong.netSongs.clear();
-                            // await netSong.fetchSongsFromInternet();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ArtistProfile()));
-                          },
-                        );
-                        break;
-                    }
-                    break;
-                }
-              },
-            ),
+            // Consumer<DbProvider>(
+            //   builder: (context, db, child) {
+            //     switch (db.status) {
+            //       case Status.Unauthenticaed:
+            //         return Container();
+            //         break;
+            //       case Status.Authenticating:
+            //         return Container();
+            //         break;
+            //       case Status.Authenticated:
+            //         return MaterialButton(
+            //               child: Text(
+            //                 "View Your Artist Profile",
+            //                 style: TextStyle(
+            //                   fontSize: 16,
+            //                   color: Colors.white,
+            //                 ),
+            //               ),
+            //               onPressed: () async {
+            //                 await artistProvider
+            //                     .getCertainArtist(db.user.email);
+            //                 // netSong.netSongs.clear();
+            //                 // await netSong.fetchSongsFromInternet();
+            //                 Navigator.push(
+            //                     context,
+            //                     MaterialPageRoute(
+            //                         builder: (context) => ArtistProfile()));
+            //               },
+            //             );
+            //         break;
+            //     }
+            //   },
+            // ),
 
             Consumer<GetArtists>(builder: (context, artistPro, child) {
               switch (artistPro.gotArtistProfileStatus) {
@@ -133,7 +126,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       "View Your Artist Profile",
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Color(0xFF5654B4),
                       ),
                     ),
                     onPressed: () async {
@@ -164,7 +157,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       "Update Your Profile",
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Color(0xFF5654B4),
                       ),
                     ),
                     onPressed: () async {
@@ -183,7 +176,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   "Browse Songs",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Color(0xFF5654B4),
                   ),
                 ),
                 onPressed: () async {
@@ -221,7 +214,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       child: Text("Browse Artists",
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Color(0xFF5654B4),
                           )),
                     );
                     break;
@@ -249,7 +242,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       child: Text("Upload Page",
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Color(0xFF5654B4),
                           )),
                     );
                     break;
@@ -277,7 +270,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       child: Text("Genre Page",
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Color(0xFF5654B4),
                           )),
                     );
                     break;
@@ -302,17 +295,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           Text("Log In",
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white,
+                                color:Color(0xFF5654B4),
                               )),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.login),
+                            child: Icon(Icons.login, color:Color(0xFF5654B4),),
                           ),
                         ]),
                   );
                   break;
                 case Status.Authenticating:
-                  return Text("Logging in");
+                  return Container();
                   break;
                 case Status.Authenticated:
                   return Container();
@@ -328,12 +321,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     return Container();
                     break;
                   case Status.Authenticating:
-                    return Text("Logging in");
+                    return Container();
                     break;
                   case Status.Authenticated:
                     return GestureDetector(
                       onTap: () {
                         db.signOutWithGoogle();
+                        artistProvider.removeArtist();
                       },
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -341,13 +335,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             Text("Log Out",
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: Colors.white,
+                                  color: Color(0xFF5654B4),
                                 )),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.logout,
-                                color: Colors.white,
+                                color: Color(0xFF5654B4),
                               ),
                             ),
                           ]),
@@ -404,11 +398,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         musicProvider.searchMusic(val);
                       },
                       decoration: InputDecoration(
+                        
                         focusedBorder: InputBorder.none,
                         border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: Color(0xFF5654B4),
+                          
+                        ),
+                        // fillColor: Color(0xFF5654B4),
+                        contentPadding: EdgeInsets.only(bottom:12),
+                        hintText: "Search",
                         prefixIcon: Icon(
                           Icons.search,
-                          color: Color(0xFF03C6C7),
+                          color: Color(0xFF5654B4),
                         ),
                         disabledBorder: InputBorder.none,
                       ),
@@ -418,43 +420,43 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
                 // backgroundColor: Color(0xFF5454f4),
                 pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.none,
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 28.0),
-                    // child: Text("Suseli"),
-                  ),
-                  // title: Padding(
-                  //   padding: const EdgeInsets.only(bottom: 28.0),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //     // crossAxisAlignment: CrossAxisAlignment/s,
-                  //     children: [
-                  //       Container(
-                  //         margin: const EdgeInsets.only(left: 0),
-                  //         height: 20,
-                  //         width: 20,
-                  //         child: GestureDetector(
-                  //           child: SvgPicture.asset(
-                  //             'assets/menu.svg',
-                  //             color: Colors.white,
-                  //           ),
-                  //           onTap: () {
-                  //             print('tapped');
-                  //           },
-                  //         ),
-                  //       ),
-                  //       Expanded(
-                  //         child: TextField(),
-                  //       ),
-                  //       IconButton(
-                  //         icon: Icon(Icons.info),
-                  //         onPressed: () {},
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
-                ),
+                // flexibleSpace: FlexibleSpaceBar(
+                //   collapseMode: CollapseMode.none,
+                //   title: Padding(
+                //     padding: const EdgeInsets.only(bottom: 28.0),
+                //     // child: Text("Suseli"),
+                //   ),
+                //   // title: Padding(
+                //   //   padding: const EdgeInsets.only(bottom: 28.0),
+                //   //   child: Row(
+                //   //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   //     // crossAxisAlignment: CrossAxisAlignment/s,
+                //   //     children: [
+                //   //       Container(
+                //   //         margin: const EdgeInsets.only(left: 0),
+                //   //         height: 20,
+                //   //         width: 20,
+                //   //         child: GestureDetector(
+                //   //           child: SvgPicture.asset(
+                //   //             'assets/menu.svg',
+                //   //             color: Colors.white,
+                //   //           ),
+                //   //           onTap: () {
+                //   //             print('tapped');
+                //   //           },
+                //   //         ),
+                //   //       ),
+                //   //       Expanded(
+                //   //         child: TextField(),
+                //   //       ),
+                //   //       IconButton(
+                //   //         icon: Icon(Icons.info),
+                //   //         onPressed: () {},
+                //   //       )
+                //   //     ],
+                //   //   ),
+                //   // ),
+                // ),
               ),
             ];
           },

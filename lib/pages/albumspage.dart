@@ -8,21 +8,27 @@ class AlbumPage extends StatefulWidget {
 }
 
 class _AlbumPageState extends State<AlbumPage> {
+  ScrollController scrollController = ScrollController();
+  
   @override
   Widget build(BuildContext context) {
     return Consumer<MusicProvider>(
-      builder: (context, songP, child) => ListView.builder(
-        itemCount: songP.albums.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(songP.albums[index].title),
-          onTap: () {
-            // print(songP.albums.length);
-            print(songP.albums[index].numberOfSongs);
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => ))
-            // songP.albums.forEach((album) {
-            //   print("The songs are:" +album.title + album.numberOfSongs + album.numberOfSongs);
-            // });
-          },
+      builder: (context, songP, child) => Scrollbar(
+        controller: scrollController,
+        isAlwaysShown: true,
+              child: ListView.builder(
+          itemCount: songP.albums.length,
+          itemBuilder: (context, index) => ListTile(
+            title: Text(songP.albums[index].title),
+            onTap: () {
+              // print(songP.albums.length);
+              print(songP.albums[index].numberOfSongs);
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ))
+              // songP.albums.forEach((album) {
+              //   print("The songs are:" +album.title + album.numberOfSongs + album.numberOfSongs);
+              // });
+            },
+          ),
         ),
       ),
     );

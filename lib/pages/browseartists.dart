@@ -14,9 +14,9 @@ class BrowseArtist extends StatefulWidget {
 class _BrowseArtistState extends State<BrowseArtist> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
-    final db = Provider.of<DbProvider>(context);
+    // final db = Provider.of<DbProvider>(context);
     final artistPro = Provider.of<GetArtists>(context);
     return Scaffold(
       appBar: AppBar(

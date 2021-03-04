@@ -65,6 +65,11 @@ class GetArtists extends ChangeNotifier {
     // return true;
     
   }
+
+  removeArtist() async{
+    gotArtistProfileStatus = GotArtistProfileStatus.Not_Yet;
+    // currentArtistName  
+  }
   
   // getSongsByArtist()
 

@@ -30,12 +30,12 @@ class _MusicPageState extends State<MusicPage> {
             onTap: () => Navigator.pop(context),
             child: Icon(
               Icons.arrow_back,
-              color: Color(0xFF03C6C7),
+              color: Color(0xFF5654B4),
               size: 24,
             )),
         title: Text(
           "Now Playing",
-          style: TextStyle(color: Color(0xFF03C6C7), fontSize: 24),
+          style: TextStyle(color: Color(0xFF5654B4), fontSize: 24),
         ),
         centerTitle: true,
       ),
@@ -78,7 +78,7 @@ class _MusicPageState extends State<MusicPage> {
                       child: Text(
                         songQ.songs[songQ.currentIndex].title.trim(),
                         style: TextStyle(
-                            color: Color(0xFF03C6C7),
+                            color: Color(0xFF5654B4),
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ),
@@ -86,7 +86,7 @@ class _MusicPageState extends State<MusicPage> {
                   : Text(
                       netPro.netSongs[netPro.currentIndex].title,
                       style: TextStyle(
-                          color: Color(0xFF03C6C7),
+                          color: Color(0xFF5654B4),
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),
@@ -98,14 +98,14 @@ class _MusicPageState extends State<MusicPage> {
                         songQ.songs[songQ.currentIndex].artist,
                         style: TextStyle(
                             fontSize: 19,
-                            color: Color(0xFF03C6C7),
+                            color: Color(0xFF5654B4),
                             fontWeight: FontWeight.bold),
                       )
                     : Text(
                         netPro.netSongs[netPro.currentIndex].artist,
                         style: TextStyle(
                             fontSize: 19,
-                            color: Color(0xFF03C6C7),
+                            color: Color(0xFF5654B4),
                             fontWeight: FontWeight.bold),
                       ),
               ),
@@ -117,7 +117,7 @@ class _MusicPageState extends State<MusicPage> {
               child: widget.source == 'local'
                   ? Slider(
                       value: songQ.positioninS,
-                      activeColor: Color(0xFF03C6C7),
+                      activeColor: Color(0xFF5654B4),
                       inactiveColor: Colors.grey,
                       onChanged: (value) {
                         songQ.positioninS = value;
@@ -129,7 +129,7 @@ class _MusicPageState extends State<MusicPage> {
                     )
                   : Slider(
                       value: netPro.positioninS,
-                      activeColor: Color(0xFF03C6C7),
+                      activeColor: Color(0xFF5654B4),
                       inactiveColor: Colors.grey,
                       onChanged: (value) {
                         netPro.positioninS = value;
@@ -147,18 +147,18 @@ class _MusicPageState extends State<MusicPage> {
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                    width: size.width * 0.79,
+                    width: size.width * 0.75,
                     margin: EdgeInsets.only(left: 22),
                     child: widget.source == 'local'
                         ? Text(
                             songQ.position,
                             style: TextStyle(
-                                fontSize: 15, color: Color(0xFF03C6C7)),
+                                fontSize: 15, color: Color(0xFF5654B4)),
                           )
                         : Text(
                             netPro.position,
                             style: TextStyle(
-                                fontSize: 15, color: Color(0xFF03C6C7)),
+                                fontSize: 15, color: Color(0xFF5654B4)),
                           )),
                 // Expanded(
                 //   child: Container(),
@@ -168,11 +168,11 @@ class _MusicPageState extends State<MusicPage> {
                     child: widget.source == 'local'
                         ? Text(
                             songQ.duration,
-                            style: TextStyle(fontSize: 15, color: Color(0xFF03C6C7)),
+                            style: TextStyle(fontSize: 15, color: Color(0xFF5654B4)),
                           )
                         : Text(
                             netPro.duration,
-                            style: TextStyle(fontSize: 15, color: Color(0xFF03C6C7)),
+                            style: TextStyle(fontSize: 15, color: Color(0xFF5654B4)),
                           )),
               ],
             ),
@@ -186,7 +186,7 @@ class _MusicPageState extends State<MusicPage> {
                   child: IconButton(
                     icon: Icon(
                       Icons.skip_previous,
-                      color: Color(0xFF03C6C7),
+                      color: Color(0xFF5654B4),
                       size: 42,
                     ),
                     onPressed: () {
@@ -210,12 +210,12 @@ class _MusicPageState extends State<MusicPage> {
                                 ? Icon(
                                     Icons.pause,
                                     size: 70,
-                                    color: Color(0xFF03C6C7),
+                                    color: Color(0xFF5654B4),
                                   )
                                 : Icon(
                                     Icons.play_arrow,
                                     size: 70,
-                                    color: Color(0xFF03C6C7),
+                                    color: Color(0xFF5654B4),
                                   ),
                             onPressed: () {
                               songQ.getPlayerState();
@@ -236,10 +236,10 @@ class _MusicPageState extends State<MusicPage> {
                                 ? Icon(
                                     Icons.pause,
                                     size: 70,
-                                    color: Colors.purple,
+                                    color: Color(0xFF5654B4),
                                   )
                                 : Icon(Icons.play_arrow,
-                                    color: Colors.purple, size: 70),
+                                    color: Color(0xFF5654B4), size: 70),
                             onPressed: () {
                               netPro.getPlayerState();
                               if (netPro.playerState ==
@@ -258,7 +258,7 @@ class _MusicPageState extends State<MusicPage> {
                   child: IconButton(
                     icon: Icon(
                       Icons.skip_next,
-                      color: Color(0xFF03C6C7),
+                      color: Color(0xFF5654B4),
                       size: 42,
                     ),
                     onPressed: () {

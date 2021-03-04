@@ -18,6 +18,7 @@ enum ProfileUpdateStatus{Updating, Updated, Pop, Free}
 class DbProvider extends ChangeNotifier {
   Status status = Status.Unauthenticaed;
   User user;
+  
   // final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _signIn = GoogleSignIn();
 

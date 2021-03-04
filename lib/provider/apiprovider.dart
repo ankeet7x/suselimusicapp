@@ -3,12 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+enum FetchFromApi { Idle, Fetching, Fetched, Popp}
+
 class ApiHelper extends ChangeNotifier {
   String url = 'http://api.suseli.org/predict';
   String genre;
   String success;
+  FetchFromApi fetchFromApi = FetchFromApi.Idle;
+
 
   postSong(String songPath) async {
+    fetchFromApi = FetchFromApi.Fetching;
+    notifyListeners();
     var postUri = Uri.parse(url);
     print("Uploading");
     var request = http.MultipartRequest('POST', postUri);
@@ -21,10 +27,30 @@ class ApiHelper extends ChangeNotifier {
         var data = jsonDecode(event);
         print(data['genre']);
         genre = data['genre'];
+        
         notifyListeners();
       });
       // print(response.stream)
+      fetchFromApi = FetchFromApi.Fetched;
+      notifyListeners();
+      popPage();
+      setToIdle();
+      notifyListeners();
 
     }
   }
+
+  popPage(){
+    Future.delayed(Duration(seconds: 2), (){
+      fetchFromApi = FetchFromApi.Popp;
+    });
+  }
+  
+  setToIdle(){
+    Future.delayed(Duration(seconds: 2), (){
+      fetchFromApi = FetchFromApi.Idle;
+      notifyListeners();
+    });
+  }
+
 }

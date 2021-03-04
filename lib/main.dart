@@ -29,9 +29,8 @@ void main() async {
       title: "Suseli",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          fontFamily: "Roboto",
           brightness: Brightness.light,
-          primaryColor: Color(0xFF03C6C7),
+          primaryColor: Color(0xFF5654B4),
           accentColor: Colors.cyan),
     ),
   ));

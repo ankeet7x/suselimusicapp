@@ -8,14 +8,20 @@ class ArtistPage extends StatefulWidget {
 }
 
 class _ArtistPageState extends State<ArtistPage> {
+  ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<MusicProvider>(
-      builder: (context, songP, child) => ListView.builder(
-        itemCount: songP.artists.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(songP.artists[index].name),
-          onTap: () {},
+      builder: (context, songP, child) => Scrollbar(
+        controller: scrollController,
+        isAlwaysShown: true,
+        child: ListView.builder(
+          itemCount: songP.artists.length,
+          itemBuilder: (context, index) => ListTile(
+            title: Text(songP.artists[index].name),
+            onTap: () {},
+          ),
         ),
       ),
     );
