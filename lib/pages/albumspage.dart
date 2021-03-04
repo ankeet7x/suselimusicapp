@@ -13,10 +13,7 @@ class _AlbumPageState extends State<AlbumPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MusicProvider>(
-      builder: (context, songP, child) => Scrollbar(
-        controller: scrollController,
-        isAlwaysShown: true,
-              child: ListView.builder(
+      builder: (context, songP, child) =>ListView.builder(
           itemCount: songP.albums.length,
           itemBuilder: (context, index) => ListTile(
             title: Text(songP.albums[index].title),
@@ -30,7 +27,7 @@ class _AlbumPageState extends State<AlbumPage> {
             },
           ),
         ),
-      ),
+      
     );
   }
 }

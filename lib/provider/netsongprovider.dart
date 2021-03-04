@@ -8,6 +8,7 @@ enum NetPlayerState { Playing, Paused, Idle }
 class NetSongProvider extends ChangeNotifier {
   List<SongModel> netSongs = [];
   AudioPlayer audioPlayer = AudioPlayer();
+  List songsToReview = [];
 
   NetSongProvider.initialize() {
     fetchSongsFromInternet();
@@ -21,6 +22,16 @@ class NetSongProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  addSongsForReview(song){
+    for (var newSong in songsToReview){
+      if (song != newSong){
+        songsToReview.add(song);
+      }
+    }
+    // songsToReview.add(song);
+    print(songsToReview.length);
+    notifyListeners();
+  }
   
 
   getSong() async =>

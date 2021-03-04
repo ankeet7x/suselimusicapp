@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-enum FetchFromApi { Idle, Fetching, Fetched, Popp}
+enum FetchFromApi { Idle, Fetching, Fetched}
 
 class ApiHelper extends ChangeNotifier {
   String url = 'http://api.suseli.org/predict';
@@ -33,21 +33,16 @@ class ApiHelper extends ChangeNotifier {
       // print(response.stream)
       fetchFromApi = FetchFromApi.Fetched;
       notifyListeners();
-      popPage();
       setToIdle();
       notifyListeners();
 
     }
   }
 
-  popPage(){
-    Future.delayed(Duration(seconds: 2), (){
-      fetchFromApi = FetchFromApi.Popp;
-    });
-  }
+  
   
   setToIdle(){
-    Future.delayed(Duration(seconds: 2), (){
+    Future.delayed(Duration(seconds: 8), (){
       fetchFromApi = FetchFromApi.Idle;
       notifyListeners();
     });

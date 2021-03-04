@@ -21,10 +21,7 @@ class _SongPageState extends State<SongPage> {
       height: height,
       child: songP.songs.length == null
           ? CircularProgressIndicator()
-          : Scrollbar(
-              controller: scrollController,
-              isAlwaysShown: true,
-              child: ListView.builder(
+          : ListView.builder(
                 itemCount: songP.songs.length,
                 itemBuilder: (context, index) {
                   return Column(
@@ -64,7 +61,7 @@ class _SongPageState extends State<SongPage> {
                   );
                 },
               ),
-            ),
+            
     );
   }
 }

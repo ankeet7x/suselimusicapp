@@ -11,6 +11,8 @@ import 'provider/suseliprovider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // var artistAccCreation = prefs.getString('artistAccCreation');
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
@@ -30,7 +32,7 @@ void main() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           brightness: Brightness.light,
-          primaryColor: Color(0xFF5654B4),
+          primaryColor: Color(0xFF480CA8),
           accentColor: Colors.cyan),
     ),
   ));

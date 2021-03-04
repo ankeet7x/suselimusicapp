@@ -8,7 +8,7 @@ class ImageStack extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.29,
+      height: size.height * 0.23,
       // width: size.width,
       color: Colors.transparent,
       child: Stack(
@@ -31,7 +31,8 @@ class ImageStack extends StatelessWidget {
           ),
           Positioned(
               top: size.height * 0.1,
-              right: (size.width - 150)/2,
+              right: (size.width+20)/2,
+              // right: (size.width - 150)/2,
               child: Container(
                   height: 150,
                   width:150,

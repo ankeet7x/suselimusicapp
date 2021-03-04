@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/provider/dbprovider.dart';
 import 'package:suseli/provider/netsongprovider.dart';
@@ -60,18 +61,32 @@ class _UploadPageState extends State<UploadPage> {
               ),
             ),
             Consumer<DbProvider>(
-              builder: (context, db, child) => Container(
-                child: db.mp3 == null
-                    ? RaisedButton(
-                        child: Text("Select your song"),
-                        onPressed: () {
+                builder: (context, db, child) => Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: InkWell(
+                        onTap: () {
                           db.selectSong();
-                          // pro.selectSong();
                         },
-                      )
-                    : Text(db.mp3.uri.toString()),
-              ),
-            ),
+                        child: Container(
+                          height: size.height * 0.05,
+                          width: size.width * 0.35,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFF480CA8), ),
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white),
+                          child: Center(
+                            child: db.mp3 == null
+                                ? Text(
+                                    "Select your song",
+                                    style: TextStyle(color: Color(0xFF480CA8)),
+                                  )
+                                : Text("Selected", style: TextStyle(
+                                  color: Color(0xFF480CA8)
+                                )),
+                          ),
+                        ),
+                      ),
+                    )),
             // Consumer<DbProvider>(
             //   builder: (context, db, child) {
             //     if (db.mp3 == null) {
@@ -88,7 +103,10 @@ class _UploadPageState extends State<UploadPage> {
                 child: Container(
                   // color: Colors.grey,
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Color(0xFF480CA8),
+                    ),
                     borderRadius: BorderRadius.circular(25),
                   ),
                   height: size.height * 0.3,
@@ -97,13 +115,32 @@ class _UploadPageState extends State<UploadPage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(25),
                       child: db.albumArt == null
-                          ? Center(
-                              child: IconButton(
-                              icon: Icon(Icons.add_a_photo),
-                              onPressed: () {
-                                db.getAlbumArt();
-                              },
-                            ))
+                          ? Column(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              // crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: size.height * 0.1,
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.add_a_photo,
+                                    size: 28,
+                                    color: Color(0xFF480CA8),
+                                  ),
+                                  onPressed: () {
+                                    db.getAlbumArt();
+                                  },
+                                ),
+                                Text(
+                                  "Add a photo",
+                                  style: TextStyle(
+                                      color: Color(0xFF480CA8),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                )
+                              ],
+                            )
                           : Image.file(
                               db.albumArt,
                               fit: BoxFit.cover,
@@ -121,38 +158,45 @@ class _UploadPageState extends State<UploadPage> {
                     return Container(
                       height: size.height * 0.05,
                       width: size.width * 0.35,
-                      color: Color(0xFF03C6C7),
+                      decoration: BoxDecoration(
+                          color: Color(0xFF480CA8),
+                          borderRadius: BorderRadius.circular(7)),
                       child: Center(
                           child: SpinKitThreeBounce(
-                        color: Colors.white,
-                        size: 20,
-                      )),
-                    );
+                            color: Colors.white,
+                            size: 12,
+                          ),
+                    ));
                     break;
                   case UploadingStatus.Uploaded:
                     return Container(
                       height: size.height * 0.05,
                       width: size.width * 0.35,
-                      color: Color(0xFF03C6C7),
-                      child: Row(
-                        children: [Icon(Icons.check), Text("Uploaded")],
-                      ),
-                    );
+                      decoration: BoxDecoration(
+                          color: Color(0xFF480CA8),
+                          borderRadius: BorderRadius.circular(7)),
+                      child: Center(
+                          child: Text("Uploaded", style: TextStyle(
+                            color: Colors.white
+                          ),),
+                    ));
                     break;
                   case UploadingStatus.Pop:
                     Navigator.pop(context);
                     break;
                   case UploadingStatus.Free:
-                    return Container(
-                      height: size.height * 0.05,
-                      width: size.width * 0.35,
-                      child: RaisedButton(
-                          color: Color(0xFF03C6C7),
-                          onPressed: () async {
-                            try {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                print("Uploading");
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          try {
+                            if (_formKey.currentState.validate()) {
+                              _formKey.currentState.save();
+                              print("Uploading");
+                              if (db.mp3 == null) {
+                                return Fluttertoast.showToast(
+                                    msg: "Insert a song or image");
+                              } else {
                                 await db.uploadSong(
                                     db.mp3,
                                     _titleController.text,
@@ -164,11 +208,19 @@ class _UploadPageState extends State<UploadPage> {
                                   netP.fetchSongsFromInternet();
                                 });
                               }
-                            } catch (e) {
-                              print(e.toString());
                             }
-                          },
-                          child: Row(
+                          } catch (e) {
+                            print(e.toString());
+                          }
+                        },
+                        child: Container(
+                          height: size.height * 0.05,
+                          width: size.width * 0.35,
+                          decoration: BoxDecoration(
+                              color: Color(0xFF480CA8),
+                              borderRadius: BorderRadius.circular(7)),
+                          child: Center(
+                              child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
@@ -176,11 +228,13 @@ class _UploadPageState extends State<UploadPage> {
                                 color: Colors.white,
                               ),
                               Text(
-                                "Upload",
+                                "Submit",
                                 style: TextStyle(color: Colors.white),
                               )
                             ],
                           )),
+                        ),
+                      ),
                     );
                 }
               },

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum Status { Unauthenticaed, Authenticating, Authenticated }
 // enum UploadingStat {Free, Uploading, Uploaded}
@@ -16,6 +17,12 @@ enum UploadingStatus { Uploading, Uploaded, Pop, Free }
 enum ProfileUpdateStatus{Updating, Updated, Pop, Free}
 
 class DbProvider extends ChangeNotifier {
+  DbProvider(){
+    this.compare();
+  }
+
+  String superUserEmail = "bikramtej3@gmail.com";
+
   Status status = Status.Unauthenticaed;
   User user;
   
@@ -74,6 +81,11 @@ class DbProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  
+
+
+
   File albumArt;
   final picker = ImagePicker();
   getAlbumArt() async {
@@ -82,6 +94,14 @@ class DbProvider extends ChangeNotifier {
       albumArt = File(pickedImage.path);
       notifyListeners();
     }
+  }
+
+
+  removeVal(){
+    url = null;
+    imgUrl = null;
+    mp3 = null;
+    albumArt = null;
   }
 
   String url;
@@ -131,6 +151,7 @@ class DbProvider extends ChangeNotifier {
                   notifyListeners();
                   Future.delayed(Duration(seconds: 1), () {
                     upStatus = UploadingStatus.Pop;
+                    removeVal();
                     notifyListeners();
                   });
                   Future.delayed(Duration(seconds: 3), () {
@@ -167,12 +188,30 @@ class DbProvider extends ChangeNotifier {
     }
   }
 
+  bool isArtist = false;
+
+  addToPref() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('isArtist', 'yes');
+  }
+
+  compare() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var art = prefs.getString('isArtist');
+    if (art != null){
+      isArtist = true;
+      notifyListeners();
+    }
+  }
 
   String profileImgUrl;
   String coverImgUrl;
-  updateArtistProfile(profileImg, coverImg, bio, username, name){
+  updateArtistProfile(profileImg, coverImg, bio, username, name) async{
     if (profileImg != null && coverImg!= null && username!=null && bio != null){
       profileUpdateStatus = ProfileUpdateStatus.Updating;
+      
+      // var string = prefs.getString("data");
+      
       notifyListeners();
       Reference profileImgRef = FirebaseStorage.instance.ref().child("profile-pic")
           .child('${randomAlphaNumeric(9)}.jpg');
@@ -195,6 +234,7 @@ class DbProvider extends ChangeNotifier {
           };
           FirebaseFirestore.instance.collection("Artists").doc(user.email).set(artistData).then((value) => print("Uploaded to db"));
           profileUpdateStatus = ProfileUpdateStatus.Updated;
+          addToPref();
           notifyListeners();
           Future.delayed(Duration(seconds: 2), (){
             profileUpdateStatus = ProfileUpdateStatus.Pop;

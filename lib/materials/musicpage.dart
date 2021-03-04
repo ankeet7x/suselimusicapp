@@ -62,9 +62,10 @@ class _MusicPageState extends State<MusicPage> {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(150),
                       child: CachedNetworkImage(
+                        fit: BoxFit.cover,
                         imageUrl: netPro.netSongs[netPro.currentIndex].imageUrl,
                         placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                            Container(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       )),
             ),

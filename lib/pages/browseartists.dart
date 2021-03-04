@@ -14,7 +14,7 @@ class BrowseArtist extends StatefulWidget {
 class _BrowseArtistState extends State<BrowseArtist> {
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     // final db = Provider.of<DbProvider>(context);
     final artistPro = Provider.of<GetArtists>(context);
@@ -33,7 +33,7 @@ class _BrowseArtistState extends State<BrowseArtist> {
       body: GridView.builder(
           itemCount: artistPro.artists.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              // childAspectRatio: size.width/0.4*size.height,
+              childAspectRatio: 0.9,
               crossAxisCount: (orientation == Orientation.portrait) ? 2 : 3),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
@@ -45,7 +45,7 @@ class _BrowseArtistState extends State<BrowseArtist> {
                       MaterialPageRoute(builder: (context) => ArtistProfile()));
                 },
                 child: ArtistCard(
-                  name: artistPro.artists[index].name,
+                  name: artistPro.artists[index].username,
                   profileImg: artistPro.artists[index].profileImg,
                 ));
           }),

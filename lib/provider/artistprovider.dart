@@ -6,6 +6,7 @@ import 'package:suseli/models/artist.dart';
 enum GotArtistProfileStatus {Not_Yet, Got}
 
 class GetArtists extends ChangeNotifier {
+  bool isAnArtist;
   List<ArtistModel> artists = [];
   ArtistModel _artistModel;
   ArtistModel get artistModel => _artistModel;

@@ -9,6 +9,7 @@ import 'package:suseli/pages/browseartists.dart';
 import 'package:suseli/pages/browsesongs.dart';
 import 'package:suseli/pages/classifypage.dart';
 import 'package:suseli/pages/genrespage.dart';
+import 'package:suseli/pages/profile.dart';
 import 'package:suseli/pages/profileedit.dart';
 import 'package:suseli/pages/songspage.dart';
 import 'package:suseli/pages/uploadpage.dart';
@@ -37,321 +38,341 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       resizeToAvoidBottomInset: false,
       drawer: Drawer(
         elevation: 10,
-        child: Container(
-          color: Colors.white,
-          child: Column(children: [
-            DrawerHeader(
-                // ignore: missing_return
-                child: Consumer<DbProvider>(builder: (context, db, child) {
-              switch (db.status) {
-                case Status.Unauthenticaed:
-                  return CircleAvatar(
-                      radius: 45,
-                      backgroundColor: Color(0xFF5654B4),
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 58,
-                      ));
-                  break;
-                case Status.Authenticating:
-                  return Container();
-                  break;
-                case Status.Authenticated:
-                  return Column(
-                    children: [
-                      CircleAvatar(
-                          radius: 45,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: CachedNetworkImage(
-                              imageUrl: db.user.photoURL,
-                              placeholder: (context, url) => Container(),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            ),
-                          )),
-                      SizedBox(height: 5),
-                      Text(
-                        db.user.displayName,
-                        style: TextStyle(color: Color(0xFF5654B4), fontSize: 18),
-                      ),
-                    ],
-                  );
-                  break;
-              }
-            })),
-            // Consumer<DbProvider>(
-            //   builder: (context, db, child) {
-            //     switch (db.status) {
-            //       case Status.Unauthenticaed:
-            //         return Container();
-            //         break;
-            //       case Status.Authenticating:
-            //         return Container();
-            //         break;
-            //       case Status.Authenticated:
-            //         return MaterialButton(
-            //               child: Text(
-            //                 "View Your Artist Profile",
-            //                 style: TextStyle(
-            //                   fontSize: 16,
-            //                   color: Colors.white,
-            //                 ),
-            //               ),
-            //               onPressed: () async {
-            //                 await artistProvider
-            //                     .getCertainArtist(db.user.email);
-            //                 // netSong.netSongs.clear();
-            //                 // await netSong.fetchSongsFromInternet();
-            //                 Navigator.push(
-            //                     context,
-            //                     MaterialPageRoute(
-            //                         builder: (context) => ArtistProfile()));
-            //               },
-            //             );
-            //         break;
-            //     }
-            //   },
-            // ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              DrawerHeader(
+                  // ignore: missing_return
+                  child: Consumer<DbProvider>(builder: (context, db, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return CircleAvatar(
+                        radius: 45,
+                        backgroundColor: Color(0xFF5654B4),
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 58,
+                        ));
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    return Column(
+                      children: [
+                        CircleAvatar(
+                            radius: 45,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: CachedNetworkImage(
+                                imageUrl: db.user.photoURL,
+                                placeholder: (context, url) => Container(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
+                            )),
+                        SizedBox(height: 5),
+                        // Text(
+                        //   db.user.displayName,
+                        //   style: TextStyle(color: Color(0xFF5654B4), fontSize: 18),
+                        // ),
+                      ],
+                    );
+                    break;
+                }
+              })),
+              // Consumer<DbProvider>(
+              //   builder: (context, db, child) {
+              //     switch (db.status) {
+              //       case Status.Unauthenticaed:
+              //         return Container();
+              //         break;
+              //       case Status.Authenticating:
+              //         return Container();
+              //         break;
+              //       case Status.Authenticated:
+              //         return MaterialButton(
+              //               child: Text(
+              //                 "View Your Artist Profile",
+              //                 style: TextStyle(
+              //                   fontSize: 16,
+              //                   color: Colors.white,
+              //                 ),
+              //               ),
+              //               onPressed: () async {
+              //                 await artistProvider
+              //                     .getCertainArtist(db.user.email);
+              //                 // netSong.netSongs.clear();
+              //                 // await netSong.fetchSongsFromInternet();
+              //                 Navigator.push(
+              //                     context,
+              //                     MaterialPageRoute(
+              //                         builder: (context) => ArtistProfile()));
+              //               },
+              //             );
+              //         break;
+              //     }
+              //   },
+              // ),
 
-            Consumer<GetArtists>(builder: (context, artistPro, child) {
-              switch (artistPro.gotArtistProfileStatus) {
-                case GotArtistProfileStatus.Not_Yet:
-                  return Container();
-                  break;
-                case GotArtistProfileStatus.Got:
-                  return MaterialButton(
-                    child: Text(
-                      "View Your Artist Profile",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF5654B4),
-                      ),
-                    ),
-                    onPressed: () async {
-                      await artistProvider.getCertainArtist(db.user.email);
-                      // netSong.netSongs.clear();
-                      // await netSong.fetchSongsFromInternet();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ArtistProfile()));
-                    },
-                  );
-                  break;
-              }
-            }),
+              Consumer<DbProvider>(builder: (context, dbPro, child) {
+                switch (dbPro.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    return MaterialButton(
+                        child: Text(
+                          "Profile",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF5654B4),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                        });
+                    break;
+                }
+              }),
 
-            Consumer<DbProvider>(builder: (context, db, child) {
-              switch (db.status) {
-                case Status.Unauthenticaed:
-                  return Container();
-                  break;
-                case Status.Authenticating:
-                  return Container();
-                  break;
-                case Status.Authenticated:
-                  return MaterialButton(
-                    child: Text(
-                      "Update Your Profile",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF5654B4),
+              Consumer<DbProvider>(builder: (context, db, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    return MaterialButton(
+                      child: Text(
+                        "Update Your Profile",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF5654B4),
+                        ),
                       ),
-                    ),
-                    onPressed: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileEdit()));
-                    },
-                  );
-                  break;
-              }
-            }),
-            Consumer<NetSongProvider>(
-              builder: (context, netSong, child) => MaterialButton(
-                child: Text(
-                  "Browse Songs",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF5654B4),
-                  ),
-                ),
-                onPressed: () async {
-                  // await db.();
-                  netSong.netSongs.clear();
-                  await netSong.fetchSongsFromInternet();
-                  await netSong.getPlayerState();
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => BrowseSongs()));
-                  });
+                      onPressed: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileEdit()));
+                      },
+                    );
+                    break;
+                }
+              }),
+              Consumer<NetSongProvider>(builder: (context, netSong, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    return MaterialButton(
+                      child: Text(
+                        "Browse Songs",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF5654B4),
+                        ),
+                      ),
+                      onPressed: () async {
+                        // await db.();
+                        netSong.netSongs.clear();
+                        await netSong.fetchSongsFromInternet();
+                        await netSong.getPlayerState();
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BrowseSongs()));
+                        });
+                      },
+                    );
+                    break;
+                }
+              }),
+              Divider(),
+              Consumer<DbProvider>(
+                builder: (context, db, child) {
+                  switch (db.status) {
+                    case Status.Unauthenticaed:
+                      return Container();
+                      break;
+                    case Status.Authenticating:
+                      return Container();
+                      break;
+                    case Status.Authenticated:
+                      return MaterialButton(
+                        // color: Colors.cyan,
+                        onPressed: () async {
+                          await artistProvider.syncArtistWithModel();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BrowseArtist()));
+                        },
+                        child: Text("Browse Artists",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF5654B4),
+                            )),
+                      );
+                      break;
+                  }
                 },
               ),
-            ),
-            Divider(),
-            Consumer<DbProvider>(
-              builder: (context, db, child) {
+              Consumer<DbProvider>(
+                builder: (context, db, child) {
+                  switch (db.status) {
+                    case Status.Unauthenticaed:
+                      return Container();
+                      break;
+                    case Status.Authenticating:
+                      return Container();
+                      break;
+                    case Status.Authenticated:
+                      return MaterialButton(
+                        // color: Colors.cyan,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UploadPage()));
+                        },
+                        child: Text("Upload Page",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF5654B4),
+                            )),
+                      );
+                      break;
+                  }
+                },
+              ),
+              Consumer<DbProvider>(
+                builder: (context, db, child) {
+                  switch (db.status) {
+                    case Status.Unauthenticaed:
+                      return Container();
+                      break;
+                    case Status.Authenticating:
+                      return Container();
+                      break;
+                    case Status.Authenticated:
+                      return MaterialButton(
+                        // color: Colors.cyan,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Classifier()));
+                        },
+                        child: Text("Genre Page",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF5654B4),
+                            )),
+                      );
+                      break;
+                  }
+                },
+              ),
+              // Divider(
+              // ),
+              Consumer<DbProvider>(builder: (context, db, child) {
                 switch (db.status) {
                   case Status.Unauthenticaed:
-                    return Container();
+                    return Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: GestureDetector(
+                          onTap: () {
+                            db.signInWithGoogle();
+                            Future.delayed(Duration(seconds: 3), () {
+                              artistProvider.getCertainArtist(db.user.email);
+                            });
+                          },
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Log In",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xFF5654B4),
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.login,
+                                    color: Color(0xFF5654B4),
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ),
+                    );
                     break;
                   case Status.Authenticating:
                     return Container();
                     break;
                   case Status.Authenticated:
-                    return MaterialButton(
-                      // color: Colors.cyan,
-                      onPressed: () async {
-                        await artistProvider.syncArtistWithModel();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BrowseArtist()));
-                      },
-                      child: Text("Browse Artists",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF5654B4),
-                          )),
-                    );
+                    return Container();
                     break;
                 }
-              },
-            ),
-            Consumer<DbProvider>(
-              builder: (context, db, child) {
-                switch (db.status) {
-                  case Status.Unauthenticaed:
-                    return Container();
-                    break;
-                  case Status.Authenticating:
-                    return Container();
-                    break;
-                  case Status.Authenticated:
-                    return MaterialButton(
-                      // color: Colors.cyan,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UploadPage()));
-                      },
-                      child: Text("Upload Page",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF5654B4),
-                          )),
-                    );
-                    break;
-                }
-              },
-            ),
-            Consumer<DbProvider>(
-              builder: (context, db, child) {
-                switch (db.status) {
-                  case Status.Unauthenticaed:
-                    return Container();
-                    break;
-                  case Status.Authenticating:
-                    return Container();
-                    break;
-                  case Status.Authenticated:
-                    return MaterialButton(
-                      // color: Colors.cyan,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Classifier()));
-                      },
-                      child: Text("Genre Page",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF5654B4),
-                          )),
-                    );
-                    break;
-                }
-              },
-            ),
-            // Divider(
-            // ),
-            Consumer<DbProvider>(builder: (context, db, child) {
-              switch (db.status) {
-                case Status.Unauthenticaed:
-                  return GestureDetector(
-                    onTap: () {
-                      db.signInWithGoogle();
-                      Future.delayed(Duration(seconds: 3), () {
-                        artistProvider.getCertainArtist(db.user.email);
-                      });
-                    },
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Log In",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color:Color(0xFF5654B4),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.login, color:Color(0xFF5654B4),),
+              }),
+              Divider(),
+              Consumer<DbProvider>(
+                // ignore: missing_return
+                builder: (context, db, child) {
+                  switch (db.status) {
+                    case Status.Unauthenticaed:
+                      return Container();
+                      break;
+                    case Status.Authenticating:
+                      return Container();
+                      break;
+                    case Status.Authenticated:
+                      return Expanded(
+                        child: Align(
+                          alignment: FractionalOffset.bottomLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              db.signOutWithGoogle();
+                              artistProvider.removeArtist();
+                            },
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Log Out",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Color(0xFF5654B4),
+                                      )),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.logout,
+                                      color: Color(0xFF5654B4),
+                                    ),
+                                  ),
+                                ]),
                           ),
-                        ]),
-                  );
-                  break;
-                case Status.Authenticating:
-                  return Container();
-                  break;
-                case Status.Authenticated:
-                  return Container();
-                  break;
-              }
-            }),
-            Divider(),
-            Consumer<DbProvider>(
-              // ignore: missing_return
-              builder: (context, db, child) {
-                switch (db.status) {
-                  case Status.Unauthenticaed:
-                    return Container();
-                    break;
-                  case Status.Authenticating:
-                    return Container();
-                    break;
-                  case Status.Authenticated:
-                    return GestureDetector(
-                      onTap: () {
-                        db.signOutWithGoogle();
-                        artistProvider.removeArtist();
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Log Out",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFF5654B4),
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.logout,
-                                color: Color(0xFF5654B4),
-                              ),
-                            ),
-                          ]),
-                    );
-                    break;
-                }
-              },
-            ),
-          ]),
-        ),
+                        ),
+                      );
+                      break;
+                  }
+                },
+              ),
+            ]),
       ),
       body: DefaultTabController(
         length: 4,
@@ -398,15 +419,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         musicProvider.searchMusic(val);
                       },
                       decoration: InputDecoration(
-                        
                         focusedBorder: InputBorder.none,
                         border: InputBorder.none,
                         hintStyle: TextStyle(
                           color: Color(0xFF5654B4),
-                          
                         ),
                         // fillColor: Color(0xFF5654B4),
-                        contentPadding: EdgeInsets.only(bottom:12),
+                        contentPadding: EdgeInsets.only(bottom: 12),
                         hintText: "Search",
                         prefixIcon: Icon(
                           Icons.search,
@@ -461,103 +480,141 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ];
           },
           body: Column(
-              children: [
-                Expanded(
-                  child: TabBarView(
-                    children: pages,
-                  ),
+            children: [
+              Expanded(
+                child: TabBarView(
+                  children: pages,
                 ),
-                Consumer<MusicProvider>(
-                  builder: (context, songPro, child) {
-                    switch (songPro.musicState) {
-                      case MusicState.Playing:
-                        return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MusicPage(source: 'local'))),
-                          child: Container(
-                            height: size.height * 0.07,
-                            color: Colors.blue,
-                            child: Row(
-                              children: [
-                                Text(songPro.songs[songPro.currentIndex].title),
-                                IconButton(
-                                  icon: Icon(Icons.skip_previous),
-                                  onPressed: () {
-                                    netProvider.stop();
-                                    songPro.playPrevious();
-                                  },
+              ),
+              Consumer<MusicProvider>(
+                builder: (context, songPro, child) {
+                  switch (songPro.musicState) {
+                    case MusicState.Playing:
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MusicPage(source: 'local'))),
+                        child: Container(
+                          height: size.height * 0.089,
+                          color: Color(0xFF5654B4),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  songPro.songs[songPro.currentIndex].title,
+                                  style: TextStyle(color: Colors.white),
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.pause),
-                                  onPressed: () {
-                                    netProvider.stop();
-                                    songPro.pause();
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.skip_next),
-                                  onPressed: () {
-                                    netProvider.stop();
-                                    songPro.playPrevious();
-                                  },
-                                )
-                              ],
-                            ),
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: size.width * 0.3,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.skip_previous,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      netProvider.stop();
+                                      songPro.playPrevious();
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.pause,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      netProvider.stop();
+                                      songPro.pause();
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.skip_next,
+                                        color: Colors.white),
+                                    onPressed: () {
+                                      netProvider.stop();
+                                      songPro.playNext();
+                                    },
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
-                        );
-                        break;
-                      case MusicState.Paused:
-                        return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MusicPage(source: 'local'))),
-                          child: Container(
-                            height: size.height * 0.07,
-                            color: Colors.blue,
-                            child: Row(
-                              children: [
-                                Text(songPro.songs[songPro.currentIndex].title),
-                                IconButton(
-                                  icon: Icon(Icons.skip_previous),
-                                  onPressed: () {
-                                    netProvider.stop();
-                                    songPro.playPrevious();
-                                  },
+                        ),
+                      );
+                      break;
+                    case MusicState.Paused:
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MusicPage(source: 'local'))),
+                        child: Container(
+                          height: size.height * 0.089,
+                          color: Color(0xFF5654B4),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  songPro.songs[songPro.currentIndex].title,
+                                  style: TextStyle(color: Colors.white),
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.play_arrow),
-                                  onPressed: () {
-                                    netProvider.stop();
-                                    songPro.resume();
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.skip_next),
-                                  onPressed: () {
-                                    netProvider.stop();
-                                    songPro.playNext();
-                                  },
-                                )
-                              ],
-                            ),
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: size.width * 0.3,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.skip_previous,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      netProvider.stop();
+                                      songPro.playPrevious();
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.play_arrow,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      netProvider.stop();
+                                      songPro.resume();
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.skip_next,
+                                        color: Colors.white),
+                                    onPressed: () {
+                                      netProvider.stop();
+                                      songPro.playNext();
+                                    },
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
-                        );
-                        break;
-                      case MusicState.Idle:
-                        return Container();
-                        break;
-                    }
-                  },
-                )
-              ],
-            ),
-            
-          
+                        ),
+                      );
+                      break;
+                    case MusicState.Idle:
+                      return Container();
+                      break;
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
       // extendBody: true,
