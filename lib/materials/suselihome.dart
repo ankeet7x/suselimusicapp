@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/materials/musicpage.dart';
 import 'package:suseli/pages/albumspage.dart';
+import 'package:suseli/pages/artistprofile.dart';
 import 'package:suseli/pages/artistspage.dart';
 import 'package:suseli/pages/browseartists.dart';
 import 'package:suseli/pages/browsesongs.dart';
 import 'package:suseli/pages/classifypage.dart';
 import 'package:suseli/pages/genrespage.dart';
-import 'package:suseli/pages/profile.dart';
+import 'package:suseli/pages/profileedit.dart';
 import 'package:suseli/pages/songspage.dart';
 import 'package:suseli/pages/uploadpage.dart';
 import 'package:suseli/provider/artistprovider.dart';
@@ -29,8 +30,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final netProvider = Provider.of<NetSongProvider>(context);
+    final db = Provider.of<DbProvider>(context);
     final artistProvider = Provider.of<GetArtists>(context);
+    final musicProvider = Provider.of<MusicProvider>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: Drawer(
         elevation: 10,
         child: Container(
@@ -77,6 +81,75 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   break;
               }
             })),
+            Consumer<DbProvider>(
+              builder: (context, db, child) {
+                switch (db.status) {
+                  case Status.Unauthenticaed:
+                    return Container();
+                    break;
+                  case Status.Authenticating:
+                    return Container();
+                    break;
+                  case Status.Authenticated:
+                    switch (artistProvider.gotArtistProfileStatus) {
+                      case GotArtistProfileStatus.Not_Yet:
+                        return Container();
+                        break;
+                      case GotArtistProfileStatus.Got:
+                        return MaterialButton(
+                          child: Text(
+                            "View Your Artist Profile",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () async {
+                            await artistProvider
+                                .getCertainArtist(db.user.email);
+                            // netSong.netSongs.clear();
+                            // await netSong.fetchSongsFromInternet();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ArtistProfile()));
+                          },
+                        );
+                        break;
+                    }
+                    break;
+                }
+              },
+            ),
+
+            Consumer<GetArtists>(builder: (context, artistPro, child) {
+              switch (artistPro.gotArtistProfileStatus) {
+                case GotArtistProfileStatus.Not_Yet:
+                  return Container();
+                  break;
+                case GotArtistProfileStatus.Got:
+                  return MaterialButton(
+                    child: Text(
+                      "View Your Artist Profile",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () async {
+                      await artistProvider.getCertainArtist(db.user.email);
+                      // netSong.netSongs.clear();
+                      // await netSong.fetchSongsFromInternet();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ArtistProfile()));
+                    },
+                  );
+                  break;
+              }
+            }),
+
             Consumer<DbProvider>(builder: (context, db, child) {
               switch (db.status) {
                 case Status.Unauthenticaed:
@@ -86,29 +159,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   return Container();
                   break;
                 case Status.Authenticated:
-                  return Consumer<NetSongProvider>(
-                    builder: (context, netSong, child) => MaterialButton(
-                      child: Text(
-                        "Profile",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                  return MaterialButton(
+                    child: Text(
+                      "Update Your Profile",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
                       ),
-                      onPressed: () async {
-                        netSong.netSongs.clear();
-                        await netSong.fetchSongsFromInternet();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfilePage()));
-                      },
                     ),
+                    onPressed: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileEdit()));
+                    },
                   );
                   break;
               }
             }),
-
             Consumer<NetSongProvider>(
               builder: (context, netSong, child) => MaterialButton(
                 child: Text(
@@ -224,6 +292,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   return GestureDetector(
                     onTap: () {
                       db.signInWithGoogle();
+                      Future.delayed(Duration(seconds: 3), () {
+                        artistProvider.getCertainArtist(db.user.email);
+                      });
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -329,6 +400,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     padding: const EdgeInsets.fromLTRB(1.0, 8, 8, 8),
                     child: TextField(
                       controller: _searchController,
+                      onChanged: (val) {
+                        musicProvider.searchMusic(val);
+                      },
                       decoration: InputDecoration(
                         focusedBorder: InputBorder.none,
                         border: InputBorder.none,
@@ -385,101 +459,103 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ];
           },
           body: Column(
-            children: [
-              Expanded(
-                child: TabBarView(
-                  children: pages,
+              children: [
+                Expanded(
+                  child: TabBarView(
+                    children: pages,
+                  ),
                 ),
-              ),
-              Consumer<MusicProvider>(
-                builder: (context, songPro, child) {
-                  switch (songPro.musicState) {
-                    case MusicState.Playing:
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MusicPage(source: 'local'))),
-                        child: Container(
-                          height: size.height * 0.07,
-                          color: Colors.blue,
-                          child: Row(
-                            children: [
-                              Text(songPro.songs[songPro.currentIndex].title),
-                              IconButton(
-                                icon: Icon(Icons.skip_previous),
-                                onPressed: () {
-                                  netProvider.stop();
-                                  songPro.playPrevious();
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.pause),
-                                onPressed: () {
-                                  netProvider.stop();
-                                  songPro.pause();
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.skip_next),
-                                onPressed: () {
-                                  netProvider.stop();
-                                  songPro.playPrevious();
-                                },
-                              )
-                            ],
+                Consumer<MusicProvider>(
+                  builder: (context, songPro, child) {
+                    switch (songPro.musicState) {
+                      case MusicState.Playing:
+                        return GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MusicPage(source: 'local'))),
+                          child: Container(
+                            height: size.height * 0.07,
+                            color: Colors.blue,
+                            child: Row(
+                              children: [
+                                Text(songPro.songs[songPro.currentIndex].title),
+                                IconButton(
+                                  icon: Icon(Icons.skip_previous),
+                                  onPressed: () {
+                                    netProvider.stop();
+                                    songPro.playPrevious();
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.pause),
+                                  onPressed: () {
+                                    netProvider.stop();
+                                    songPro.pause();
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.skip_next),
+                                  onPressed: () {
+                                    netProvider.stop();
+                                    songPro.playPrevious();
+                                  },
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                      break;
-                    case MusicState.Paused:
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MusicPage(source: 'local'))),
-                        child: Container(
-                          height: size.height * 0.07,
-                          color: Colors.blue,
-                          child: Row(
-                            children: [
-                              Text(songPro.songs[songPro.currentIndex].title),
-                              IconButton(
-                                icon: Icon(Icons.skip_previous),
-                                onPressed: () {
-                                  netProvider.stop();
-                                  songPro.playPrevious();
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.play_arrow),
-                                onPressed: () {
-                                  netProvider.stop();
-                                  songPro.resume();
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.skip_next),
-                                onPressed: () {
-                                  netProvider.stop();
-                                  songPro.playNext();
-                                },
-                              )
-                            ],
+                        );
+                        break;
+                      case MusicState.Paused:
+                        return GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MusicPage(source: 'local'))),
+                          child: Container(
+                            height: size.height * 0.07,
+                            color: Colors.blue,
+                            child: Row(
+                              children: [
+                                Text(songPro.songs[songPro.currentIndex].title),
+                                IconButton(
+                                  icon: Icon(Icons.skip_previous),
+                                  onPressed: () {
+                                    netProvider.stop();
+                                    songPro.playPrevious();
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.play_arrow),
+                                  onPressed: () {
+                                    netProvider.stop();
+                                    songPro.resume();
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.skip_next),
+                                  onPressed: () {
+                                    netProvider.stop();
+                                    songPro.playNext();
+                                  },
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                      break;
-                    case MusicState.Idle:
-                      return Container();
-                      break;
-                  }
-                },
-              )
-            ],
-          ),
+                        );
+                        break;
+                      case MusicState.Idle:
+                        return Container();
+                        break;
+                    }
+                  },
+                )
+              ],
+            ),
+            
+          
         ),
       ),
       // extendBody: true,

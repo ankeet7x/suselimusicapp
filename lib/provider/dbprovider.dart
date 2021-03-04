@@ -56,6 +56,7 @@ class DbProvider extends ChangeNotifier {
     }
   }
 
+
   File mp3;
   selectSong() async {
     try {
@@ -169,7 +170,7 @@ class DbProvider extends ChangeNotifier {
   String profileImgUrl;
   String coverImgUrl;
   updateArtistProfile(profileImg, coverImg, bio, username, name){
-    
+    if (profileImg != null && coverImg!= null && username!=null && bio != null){
       profileUpdateStatus = ProfileUpdateStatus.Updating;
       notifyListeners();
       Reference profileImgRef = FirebaseStorage.instance.ref().child("profile-pic")
@@ -203,6 +204,8 @@ class DbProvider extends ChangeNotifier {
           notifyListeners();
         }));
       }));
+    }
+      
     }
   
 

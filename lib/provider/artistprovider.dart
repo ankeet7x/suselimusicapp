@@ -2,10 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:suseli/models/artist.dart';
 
+
+enum GotArtistProfileStatus {Not_Yet, Got}
+
 class GetArtists extends ChangeNotifier {
   List<ArtistModel> artists = [];
   ArtistModel _artistModel;
   ArtistModel get artistModel => _artistModel;
+  GotArtistProfileStatus gotArtistProfileStatus = GotArtistProfileStatus.Not_Yet;
+
+  GetArtists(){
+    this.syncArtistWithModel();
+  }
+
 
   syncArtistWithModel() async {
     try{
@@ -39,6 +48,8 @@ class GetArtists extends ChangeNotifier {
     await FirebaseFirestore.instance.collection('Artists').get().then((value){
       for (DocumentSnapshot searchedArtist in value.docs){
         if (searchedArtist.get('email') == email){
+          gotArtistProfileStatus = GotArtistProfileStatus.Got;
+          notifyListeners();
           currentArtistEm = email;
           currentArtistbio = searchedArtist.get('bio');
           currentArtistCover = searchedArtist.get('coverImg');
@@ -48,8 +59,11 @@ class GetArtists extends ChangeNotifier {
           print(currentArtistEm);
           notifyListeners();
         }
+        
       }
     });
+    // return true;
+    
   }
   
   // getSongsByArtist()

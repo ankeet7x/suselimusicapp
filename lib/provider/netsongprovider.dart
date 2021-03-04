@@ -21,6 +21,8 @@ class NetSongProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  
+
   getSong() async =>
       await FirebaseFirestore.instance.collection('Songs').get().then((doc) {
         for (DocumentSnapshot geet in doc.docs) {

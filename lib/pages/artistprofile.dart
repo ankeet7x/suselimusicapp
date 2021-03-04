@@ -5,8 +5,6 @@ import 'package:suseli/provider/netsongprovider.dart';
 import 'package:suseli/widgets/covernpro.dart';
 
 class ArtistProfile extends StatefulWidget {
-  // final String email;
-  // ArtistProfile({this.email});
 
   @override
   _ArtistProfileState createState() => _ArtistProfileState();

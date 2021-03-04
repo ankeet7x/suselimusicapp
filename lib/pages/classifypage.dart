@@ -14,12 +14,18 @@ class _ClassifierState extends State<Classifier> {
   Widget build(BuildContext context) {
     final filePro = Provider.of<DbProvider>(context);
     final genrePro = Provider.of<ApiHelper>(context);
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Genre page"),
+        centerTitle: true,
+        title: Text("Genre page", style: TextStyle(color: Colors.white),),
       ),
       body: Column(
         children: [
+          SizedBox(
+            height: size.height*0.1,
+          ),
+          Center(child: Text("Check Genre")),
           RaisedButton(
             child: Text("Select a song"),
             onPressed: (){

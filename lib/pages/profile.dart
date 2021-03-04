@@ -17,6 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: new AppBar(
+          centerTitle: true,
           title: Text("Your Profile"),
         ),
         // extendBody: true,

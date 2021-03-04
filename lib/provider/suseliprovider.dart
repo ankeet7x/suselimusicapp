@@ -22,7 +22,21 @@ class MusicProvider extends ChangeNotifier {
   }
 
   MusicState musicState = MusicState.Idle;
+
   
+  List<SongInfo> matchedSongs = [];
+  searchMusic(val) {
+    matchedSongs.clear();
+    for(SongInfo song in songs){
+      // print(song.title.compareTo(val).toStringAsPrecision(val).toString());
+      if (val == song.title.toLowerCase()){
+        print(val);
+        matchedSongs.add(val);
+        print(matchedSongs.length);
+      }
+    }
+    // print(songs.where((element) => element=val).toString());
+  }
 
   //Colors
   Color bgColor = const Color(0xFF2a27d0);

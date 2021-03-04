@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'package:suseli/provider/apiprovider.dart';
 import 'package:suseli/provider/artistprovider.dart';
 import 'package:suseli/provider/dbprovider.dart';
@@ -20,10 +21,15 @@ void main() async {
       ChangeNotifierProvider.value(value: NetSongProvider.initialize())
     ],
     child: MaterialApp(
-      home: Home(),
+      home: SplashScreen(
+        seconds: 2,
+        photoSize: 100,
+        image: Image.asset('assets/download.jpeg'),
+        navigateAfterSeconds: Home()),
       title: "Suseli",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          fontFamily: "Roboto",
           brightness: Brightness.light,
           primaryColor: Color(0xFF03C6C7),
           accentColor: Colors.cyan),

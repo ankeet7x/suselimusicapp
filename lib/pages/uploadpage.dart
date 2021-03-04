@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/provider/dbprovider.dart';
 import 'package:suseli/provider/netsongprovider.dart';
-import 'package:suseli/widgets/songuploadfields.dart';
+import 'package:suseli/widgets/styledtf.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -30,6 +30,7 @@ class _UploadPageState extends State<UploadPage> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text("Upload Page"),
         ),
         body: 
@@ -40,13 +41,17 @@ class _UploadPageState extends State<UploadPage> {
                   child: Column(
                     children: [
                       StyledTf(
+                        providedHeight: size.height * 0.06,
                         hintText: "Title",
+                        maxLines: 1,
                         getController: _titleController,
                         artistN: "Title",
                         labelText: "Title",
                       ),
                       StyledTf(
+                        providedHeight: size.height * 0.06,
                         hintText: "Artist",
+                        maxLines: 1,
                         getController: _artistController,
                         artistN: "Artist",
                         labelText: "Artist",
