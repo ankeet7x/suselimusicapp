@@ -24,9 +24,10 @@ void main() async {
     ],
     child: MaterialApp(
       home: SplashScreen(
+        backgroundColor: Color(0xFF480CA8),
         seconds: 2,
-        photoSize: 100,
-        image: Image.asset('assets/download.jpeg'),
+        photoSize: 70,
+        image: Image.asset('assets/logo.png'),
         navigateAfterSeconds: Home()),
       title: "Suseli",
       debugShowCheckedModeBanner: false,

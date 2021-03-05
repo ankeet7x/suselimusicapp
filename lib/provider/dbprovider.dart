@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -235,6 +236,7 @@ class DbProvider extends ChangeNotifier {
           FirebaseFirestore.instance.collection("Artists").doc(user.email).set(artistData).then((value) => print("Uploaded to db"));
           profileUpdateStatus = ProfileUpdateStatus.Updated;
           addToPref();
+          isArtist = true;
           notifyListeners();
           Future.delayed(Duration(seconds: 2), (){
             profileUpdateStatus = ProfileUpdateStatus.Pop;
@@ -248,6 +250,19 @@ class DbProvider extends ChangeNotifier {
     }
       
     }
+
+
+
+  deleteASong(songUrl) async{
+    FirebaseFirestore.instance.collection("Songs").get().then((snapshots){
+      for (DocumentSnapshot snapshot in snapshots.docs){
+        if (snapshot.data()['songUrl'] == songUrl){
+          snapshot.reference.delete();
+        }
+      }
+    });
+  }
+
   
 
 

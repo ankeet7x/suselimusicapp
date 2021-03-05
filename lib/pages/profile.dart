@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suseli/pages/artistprofile.dart';
 import 'package:suseli/pages/profileedit.dart';
 import 'package:suseli/provider/artistprovider.dart';
@@ -27,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final artistPro = Provider.of<GetArtists>(context);
     final db = Provider.of<DbProvider>(context);
+    final netsongPro = Provider.of<NetSongProvider>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: new AppBar(
@@ -73,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         Consumer<DbProvider>(builder: (context, dbPro, child){
                           return Container(
-                            child: dbPro.isArtist ? MaterialButton(child: Text("Your Artist Profile"), onPressed:(){
+                            child: (dbPro.isArtist == true) ? MaterialButton(child: Text("Your Artist Profile"), onPressed:(){
                               artistPro.getCertainArtist(dbPro.user.email);
                               Navigator.push(context, MaterialPageRoute(builder: (context) =>ArtistProfile()));
                             }):Container(),
@@ -95,7 +96,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     itemBuilder: (context, index) {
                       if (net.netSongs[index].uploadedBy == db.user.email) {
                         return ListTile(
-                          
+                          trailing: IconButton(icon: Icon(Icons.delete),onPressed: (){
+                            db.deleteASong(net.netSongs[index].songUrl);
+                            // setState(() {
+                            netsongPro.netSongs.clear();
+                            netsongPro.getSong();
+                            // });
+                            return Fluttertoast.showToast(msg: "Deleting");
+                            
+                          },),
                           title: Text(net.netSongs[index].title),
                           subtitle: Text(net.netSongs[index].artist),
                         );

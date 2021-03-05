@@ -42,12 +42,12 @@ class _ClassifierState extends State<Classifier> {
                 switch (apiPro.fetchFromApi) {
                   case FetchFromApi.Idle:
                     return Container(
-                      child: filePro.mp3 == null
+                      child: genrePro.mp3 == null
                           ? Padding(
                               padding: const EdgeInsets.all(20.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  filePro.selectSong();
+                                  genrePro.selectSong();
                                 },
                                 child: Container(
                                   height: size.height * 0.22,
@@ -118,7 +118,7 @@ class _ClassifierState extends State<Classifier> {
                     return Padding(
                       padding: const EdgeInsets.all(22.0),
                       child: Container(
-                        child: filePro.mp3 == null
+                        child: genrePro.mp3 == null
                             ? Container(
                                 height: size.height * 0.05,
                                 width: size.width * 0.35,
@@ -139,7 +139,7 @@ class _ClassifierState extends State<Classifier> {
                             : GestureDetector(
                                 onTap: () {
                                   if (filePro.mp3 != null) {
-                                    genrePro.postSong(filePro.mp3.path);
+                                    genrePro.postSong(genrePro.mp3.path);
                                     Future.delayed(Duration(seconds: 10), () {
                                       filePro.removeVal();
                                     });

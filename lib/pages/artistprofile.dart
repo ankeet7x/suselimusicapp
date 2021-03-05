@@ -66,6 +66,7 @@ class _ArtistProfileState extends State<ArtistProfile> {
                         netSongPro.netSongs[index].uploadedBy) {
                       return ListTile(
                         // leading: Text((index+1).toString()),
+                        // trailing: IconButton(icon: Icon(Icons.delete), onPressed: (){},),
                         title: Text(netSongPro.netSongs[index].title),
                         subtitle: Text(netSongPro.netSongs[index].artist),
                         onTap: (){

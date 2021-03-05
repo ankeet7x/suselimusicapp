@@ -134,6 +134,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           ),
                         ),
                         onPressed: () {
+                          netProvider.netSongs.clear();
+                          netProvider.fetchSongsFromInternet();
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
                         });
                     break;
