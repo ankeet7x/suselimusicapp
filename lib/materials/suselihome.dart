@@ -143,35 +143,35 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 }
               }),
 
-              Consumer<DbProvider>(builder: (context, db, child) {
-                switch (db.status) {
-                  case Status.Unauthenticaed:
-                    return Container();
-                    break;
-                  case Status.Authenticating:
-                    return Container();
-                    break;
-                  case Status.Authenticated:
-                    return MaterialButton(
-                      child: Text(
-                        "Update Your Profile",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF5654B4),
-                        ),
-                      ),
-                      onPressed: () async {
-                        db.coverImgFile = null;
-                        db.profileImgFile = null;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfileEdit()));
-                      },
-                    );
-                    break;
-                }
-              }),
+              // Consumer<DbProvider>(builder: (context, db, child) {
+              //   switch (db.status) {
+              //     case Status.Unauthenticaed:
+              //       return Container();
+              //       break;
+              //     case Status.Authenticating:
+              //       return Container();
+              //       break;
+              //     case Status.Authenticated:
+              //       return MaterialButton(
+              //         child: Text(
+              //           "Update Your Profile",
+              //           style: TextStyle(
+              //             fontSize: 16,
+              //             color: Color(0xFF5654B4),
+              //           ),
+              //         ),
+              //         onPressed: () async {
+              //           db.coverImgFile = null;
+              //           db.profileImgFile = null;
+              //           Navigator.push(
+              //               context,
+              //               MaterialPageRoute(
+              //                   builder: (context) => ProfileEdit()));
+              //         },
+              //       );
+              //       break;
+              //   }
+              // }),
               Consumer<NetSongProvider>(builder: (context, netSong, child) {
                 switch (db.status) {
                   case Status.Unauthenticaed:
@@ -205,7 +205,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     break;
                 }
               }),
-              Divider(),
+              // Divider(),
               Consumer<DbProvider>(
                 builder: (context, db, child) {
                   switch (db.status) {
@@ -256,7 +256,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               MaterialPageRoute(
                                   builder: (context) => UploadPage()));
                         },
-                        child: Text("Upload Page",
+                        child: Text("Upload Song",
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFF5654B4),
@@ -285,7 +285,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               MaterialPageRoute(
                                   builder: (context) => Classifier()));
                         },
-                        child: Text("Genre Page",
+                        child: Text("Predict Genre",
                             style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFF5654B4),

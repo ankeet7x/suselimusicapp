@@ -13,6 +13,10 @@ class ApiHelper extends ChangeNotifier {
   String success;
   FetchFromApi fetchFromApi = FetchFromApi.Idle;
 
+  removeVal(){
+    mp3 = null;
+    notifyListeners();
+  }
 
   File mp3;
   selectSong() async {

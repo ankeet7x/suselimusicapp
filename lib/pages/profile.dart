@@ -13,15 +13,12 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-
 class _ProfilePageState extends State<ProfilePage> {
-
   // @override
   // void initState(){
   //   super.initState();
   //   SharedPreferences prefs = await SharedPreferences
   // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,41 +42,88 @@ class _ProfilePageState extends State<ProfilePage> {
                   return Container(
                     child: Column(
                       children: [
-                        SizedBox(height: size.height*0.03,),
+                        SizedBox(
+                          height: size.height * 0.03,
+                        ),
                         Container(
-                          height: size.height*0.13,
+                          height: size.height * 0.13,
                           child: ClipRRect(
-                            
                             borderRadius: BorderRadius.circular(55),
-                            child:
-                                CachedNetworkImage(imageUrl: db.user.photoURL, fit: BoxFit.cover,),
+                            child: CachedNetworkImage(
+                              imageUrl: db.user.photoURL,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                        SizedBox(height: size.height*0.03,),
-                        Text(db.user.displayName.toUpperCase(), style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 18
-                        ),),
+                        SizedBox(
+                          height: size.height * 0.03,
+                        ),
+                        Text(
+                          db.user.displayName.toUpperCase(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.normal, fontSize: 18),
+                        ),
                         SizedBox(
                           height: 0.01,
                         ),
-                        RaisedButton(
-                          child: Text("Edit Your Profile"),
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: () {
+                            db.coverImgFile = null;
+                            db.profileImgFile = null;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ProfileEdit()));
                           },
+                          child: Container(
+                            height: size.height * 0.05,
+                            width: size.width * 0.3,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF480CA8),
+                                borderRadius: BorderRadius.circular(7)),
+                            child: Center(
+                              child: Text(
+                                "Edit Profile",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                         ),
-                        Consumer<DbProvider>(builder: (context, dbPro, child){
-                          return Container(
-                            child: (dbPro.isArtist == true) ? MaterialButton(child: Text("Your Artist Profile"), onPressed:(){
-                              artistPro.getCertainArtist(dbPro.user.email);
-                              Navigator.push(context, MaterialPageRoute(builder: (context) =>ArtistProfile()));
-                            }):Container(),
-                          );
-                        },),
+                        SizedBox(height: size.height*0.015,),
+                        Consumer<DbProvider>(
+                          builder: (context, dbPro, child) {
+                            return Container(
+                              child: (dbPro.isArtist == true)
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        artistPro
+                                            .getCertainArtist(dbPro.user.email);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ArtistProfile()));
+                                      },
+                                      child: Container(
+                                        height: size.height * 0.05,
+                                        width: size.width * 0.35,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFF480CA8),
+                                            borderRadius:
+                                                BorderRadius.circular(7)),
+                                        child: Center(
+                                          child: Text(
+                                            "Your Artist Profile",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            );
+                          },
+                        ),
                         Divider(),
                         Center(child: Text("Your Songs"))
                       ],
@@ -96,15 +140,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     itemBuilder: (context, index) {
                       if (net.netSongs[index].uploadedBy == db.user.email) {
                         return ListTile(
-                          trailing: IconButton(icon: Icon(Icons.delete),onPressed: (){
-                            db.deleteASong(net.netSongs[index].songUrl);
-                            // setState(() {
-                            netsongPro.netSongs.clear();
-                            netsongPro.getSong();
-                            // });
-                            return Fluttertoast.showToast(msg: "Deleting");
-                            
-                          },),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              db.deleteASong(net.netSongs[index].songUrl);
+                              // setState(() {
+                              netsongPro.netSongs.clear();
+                              netsongPro.getSong();
+                              // });
+                              return Fluttertoast.showToast(msg: "Deleting");
+                            },
+                          ),
                           title: Text(net.netSongs[index].title),
                           subtitle: Text(net.netSongs[index].artist),
                         );

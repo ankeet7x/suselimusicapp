@@ -138,10 +138,10 @@ class _ClassifierState extends State<Classifier> {
                               )
                             : GestureDetector(
                                 onTap: () {
-                                  if (filePro.mp3 != null) {
+                                  if (genrePro.mp3 != null) {
                                     genrePro.postSong(genrePro.mp3.path);
                                     Future.delayed(Duration(seconds: 10), () {
-                                      filePro.removeVal();
+                                      genrePro.removeVal();
                                     });
                                   } else {
                                     return Fluttertoast.showToast(
@@ -213,17 +213,20 @@ class _ClassifierState extends State<Classifier> {
                       child: Column(children: [
                         Text(
                         "The Genre is",
-                        style: TextStyle(fontSize: 30),
+                        style: TextStyle(fontSize: 22),
                       ),
                       SizedBox(height: size.height*0.03),
                       Padding(
                         padding: const EdgeInsets.all(13.0),
-                        child: Image.asset('assets/arrow.gif'),
+                        child: Container(
+                          height: size.height*0.2,
+                          child: Image.asset('assets/arrow.gif')),
                       ),
                       SizedBox(height: size.height*0.03),
-                      Text(api.genre, style: TextStyle(
+                      Text(api.genre.toUpperCase(), style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 40
+                        color: Color(0xFF480CA8),
+                        fontSize: 32
                       ),),
                       
 
