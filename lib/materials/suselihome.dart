@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suseli/materials/musicpage.dart';
 import 'package:suseli/pages/albumspage.dart';
-import 'package:suseli/pages/artistprofile.dart';
 import 'package:suseli/pages/artistspage.dart';
 import 'package:suseli/pages/browseartists.dart';
 import 'package:suseli/pages/browsesongs.dart';
@@ -13,6 +12,7 @@ import 'package:suseli/pages/profile.dart';
 import 'package:suseli/pages/profileedit.dart';
 import 'package:suseli/pages/songspage.dart';
 import 'package:suseli/pages/uploadpage.dart';
+import 'package:suseli/provider/apiprovider.dart';
 import 'package:suseli/provider/artistprovider.dart';
 import 'package:suseli/provider/dbprovider.dart';
 import 'package:suseli/provider/netsongprovider.dart';
@@ -31,6 +31,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final netProvider = Provider.of<NetSongProvider>(context);
+    final apiHelper = Provider.of<ApiHelper>(context);
     final db = Provider.of<DbProvider>(context);
     final artistProvider = Provider.of<GetArtists>(context);
     final musicProvider = Provider.of<MusicProvider>(context);
@@ -160,6 +161,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         ),
                       ),
                       onPressed: () async {
+                        db.coverImgFile = null;
+                        db.profileImgFile = null;
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -245,6 +248,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       return MaterialButton(
                         // color: Colors.cyan,
                         onPressed: () {
+                          db.mp3 = null;
+                          
+                          db.albumArt = null;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -273,6 +279,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       return MaterialButton(
                         // color: Colors.cyan,
                         onPressed: () {
+                          apiHelper.mp3 = null;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -558,7 +565,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 builder: (context) =>
                                     MusicPage(source: 'local'))),
                         child: Container(
-                          height: size.height * 0.089,
+                          height: size.height * 0.09,
                           color: Color(0xFF5654B4),
                           child: Column(
                             children: [

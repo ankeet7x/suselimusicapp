@@ -99,9 +99,12 @@ class _BrowseSongsState extends State<BrowseSongs> {
                             color: Colors.white,
                             icon: Icons.report,
                             onTap: () {
-                              songProvider.addSongsForReview(songProvider.netSongs[index].title);
-                              print('The song is sent to the admin for a review');
-                              return Fluttertoast.showToast(msg: "The song will be reviewed by admins");
+                              songProvider.addSongsForReview(
+                                  songProvider.netSongs[index].title);
+                              print(
+                                  'The song is sent to the admin for a review');
+                              return Fluttertoast.showToast(
+                                  msg: "The song will be reviewed by admins");
                             })
                       ],
                     );
@@ -114,54 +117,63 @@ class _BrowseSongsState extends State<BrowseSongs> {
                 switch (netPro.netPlayerState) {
                   case NetPlayerState.Playing:
                     return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MusicPage(source: 'internet'))),
-                          child: Container(
-                            height: size.height * 0.08,
-                            color: Color(0xFF5654B4),
-                            child: Column(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MusicPage(source: 'internet'))),
+                      child: Container(
+                        height: size.height * 0.09,
+                        color: Color(0xFF5654B4),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                songProvider
+                                    .netSongs[songProvider.currentIndex].title,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top:5.0),
-                                  child: Text(songProvider.netSongs[songProvider.currentIndex].title, style: TextStyle(
-                                    color: Colors.white
-                                  ),),
+                                SizedBox(
+                                  width: size.width * 0.3,
                                 ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: size.width * 0.3,
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.skip_previous, color: Colors.white,),
-                                      onPressed: () {
-                                        localProvider.stop();
-                                        songProvider.playPrevious();
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.pause, color: Colors.white,),
-                                      onPressed: () {
-                                        localProvider.stop();
-                                        songProvider.pause();
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.skip_next, color: Colors.white),
-                                      onPressed: () {
-                                        localProvider.stop();
-                                        songProvider.playNext();
-                                      },
-                                    )
-                                  ],
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.skip_previous,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    localProvider.stop();
+                                    songProvider.playPrevious();
+                                  },
                                 ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.pause,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    localProvider.stop();
+                                    songProvider.pause();
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.skip_next,
+                                      color: Colors.white),
+                                  onPressed: () {
+                                    localProvider.stop();
+                                    songProvider.playNext();
+                                  },
+                                )
                               ],
                             ),
-                          ),
-                        );
+                          ],
+                        ),
+                      ),
+                    );
                     break;
                   case NetPlayerState.Paused:
                     return GestureDetector(
@@ -171,32 +183,53 @@ class _BrowseSongsState extends State<BrowseSongs> {
                               builder: (context) =>
                                   MusicPage(source: 'internet'))),
                       child: Container(
-                        height: size.height * 0.07,
-                        color: Colors.blue,
-                        child: Row(
+                        height: size.height * 0.09,
+                        color: Color(0xFF5654B4),
+                        child: Column(
                           children: [
-                            Text(netPro.netSongs[netPro.currentIndex].title),
-                            IconButton(
-                              icon: Icon(Icons.skip_previous),
-                              onPressed: () {
-                                songProvider.stop();
-                                netPro.playPrevious();
-                              },
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                songProvider
+                                    .netSongs[songProvider.currentIndex].title,
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.play_arrow),
-                              onPressed: () {
-                                songProvider.stop();
-                                netPro.resume();
-                              },
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: size.width * 0.3,
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.skip_previous,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    localProvider.stop();
+                                    songProvider.playPrevious();
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    localProvider.stop();
+                                    songProvider.resume();
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.skip_next,
+                                      color: Colors.white),
+                                  onPressed: () {
+                                    localProvider.stop();
+                                    songProvider.playNext();
+                                  },
+                                )
+                              ],
                             ),
-                            IconButton(
-                              icon: Icon(Icons.skip_next),
-                              onPressed: () {
-                                songProvider.stop();
-                                netPro.playPrevious();
-                              },
-                            )
                           ],
                         ),
                       ),

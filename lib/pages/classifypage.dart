@@ -210,10 +210,24 @@ class _ClassifierState extends State<Classifier> {
                   case FetchFromApi.Fetched:
                     return Padding(
                       padding: const EdgeInsets.only(top: 18.0),
-                      child: Text(
-                        "The Genre is: " + api.genre,
-                        style: TextStyle(fontSize: 20),
+                      child: Column(children: [
+                        Text(
+                        "The Genre is",
+                        style: TextStyle(fontSize: 30),
                       ),
+                      SizedBox(height: size.height*0.03),
+                      Padding(
+                        padding: const EdgeInsets.all(13.0),
+                        child: Image.asset('assets/arrow.gif'),
+                      ),
+                      SizedBox(height: size.height*0.03),
+                      Text(api.genre, style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40
+                      ),),
+                      
+
+                      ],)
                     );
                     break;
                 }

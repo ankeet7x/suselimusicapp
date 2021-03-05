@@ -8,7 +8,7 @@ class ImageStack extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.23,
+      height: size.height * 0.30,
       // width: size.width,
       color: Colors.transparent,
       child: Stack(
